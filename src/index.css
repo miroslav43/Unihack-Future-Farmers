@@ -1,0 +1,180 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Base colors - premium palette */
+    --background: 140 20% 98%;
+    --foreground: 140 35% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 140 35% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 140 35% 15%;
+
+    --primary: 140 65% 42%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 140 65% 36%;
+
+    --secondary: 25 35% 45%;
+    --secondary-foreground: 0 0% 100%;
+    --secondary-hover: 25 35% 38%;
+
+    --muted: 140 10% 95%;
+    --muted-foreground: 140 15% 45%;
+
+    --accent: 85 55% 55%;
+    --accent-foreground: 140 60% 20%;
+
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 140 15% 90%;
+    --input: 140 15% 92%;
+    --ring: 140 65% 42%;
+
+    --radius: 0.75rem;
+    
+    --success: 140 65% 42%;
+    --warning: 38 95% 55%;
+    
+    /* Chart colors */
+    --chart-1: 140 65% 42%;
+    --chart-2: 85 55% 55%;
+    --chart-3: 65 60% 52%;
+    --chart-4: 25 35% 45%;
+    --chart-5: 38 95% 55%;
+
+    /* Premium design tokens */
+    --gradient-primary: linear-gradient(135deg, hsl(140 65% 42%) 0%, hsl(140 65% 52%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(25 35% 45%) 0%, hsl(25 35% 55%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(85 55% 55%) 0%, hsl(85 55% 65%) 100%);
+    --gradient-subtle: linear-gradient(180deg, hsl(140 20% 98%) 0%, hsl(140 15% 96%) 100%);
+    
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.03);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.03);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.06), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.06);
+    --shadow-glow: 0 0 20px -5px hsl(140 65% 42% / 0.3);
+    
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 140 35% 15%;
+    --sidebar-primary: 140 65% 42%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 140 10% 96%;
+    --sidebar-accent-foreground: 140 35% 15%;
+    --sidebar-border: 140 15% 92%;
+    --sidebar-ring: 140 65% 42%;
+  }
+
+  .dark {
+    --background: 140 30% 8%;
+    --foreground: 140 15% 95%;
+
+    --card: 140 25% 12%;
+    --card-foreground: 140 15% 95%;
+
+    --popover: 140 25% 12%;
+    --popover-foreground: 140 15% 95%;
+
+    --primary: 140 60% 55%;
+    --primary-foreground: 140 60% 15%;
+    --primary-hover: 140 60% 60%;
+
+    --secondary: 25 30% 40%;
+    --secondary-foreground: 0 0% 100%;
+    --secondary-hover: 25 30% 45%;
+
+    --muted: 140 20% 18%;
+    --muted-foreground: 140 12% 65%;
+
+    --accent: 85 50% 55%;
+    --accent-foreground: 140 60% 15%;
+
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 140 20% 20%;
+    --input: 140 20% 22%;
+    --ring: 140 60% 55%;
+    
+    --gradient-primary: linear-gradient(135deg, hsl(140 60% 45%) 0%, hsl(140 60% 55%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(25 30% 40%) 0%, hsl(25 30% 50%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(85 50% 50%) 0%, hsl(85 50% 60%) 100%);
+    --gradient-subtle: linear-gradient(180deg, hsl(140 25% 10%) 0%, hsl(140 30% 8%) 100%);
+    
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.6), 0 4px 6px -4px rgb(0 0 0 / 0.5);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.7), 0 8px 10px -6px rgb(0 0 0 / 0.6);
+    --shadow-glow: 0 0 20px -5px hsl(140 60% 55% / 0.4);
+    
+    --sidebar-background: 140 30% 10%;
+    --sidebar-foreground: 140 15% 95%;
+    --sidebar-primary: 140 60% 55%;
+    --sidebar-primary-foreground: 140 60% 15%;
+    --sidebar-accent: 140 20% 15%;
+    --sidebar-accent-foreground: 140 15% 95%;
+    --sidebar-border: 140 20% 20%;
+    --sidebar-ring: 140 60% 55%;
+    
+    --success: 140 60% 55%;
+    --warning: 38 95% 55%;
+    --chart-1: 140 60% 55%;
+    --chart-2: 85 50% 55%;
+    --chart-3: 65 55% 52%;
+    --chart-4: 25 30% 45%;
+    --chart-5: 38 95% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "cv11", "ss01";
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+}
+
+@layer utilities {
+  .shadow-premium {
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .shadow-premium-lg {
+    box-shadow: var(--shadow-xl);
+  }
+  
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+  
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+  
+  .gradient-secondary {
+    background: var(--gradient-secondary);
+  }
+  
+  .gradient-accent {
+    background: var(--gradient-accent);
+  }
+  
+  .gradient-subtle {
+    background: var(--gradient-subtle);
+  }
+}
