@@ -1,8 +1,21 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, Signal, ScanLine, Bot, FileChartLine, Settings, Menu, X, Sprout, Sun, Warehouse } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import {
+  Bot,
+  FileChartLine,
+  LayoutDashboard,
+  Menu,
+  MessageCircle,
+  ScanLine,
+  Settings,
+  Signal,
+  Sprout,
+  Sun,
+  Warehouse,
+  X,
+} from "lucide-react";
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 const navItems = [
   { path: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -10,6 +23,7 @@ const navItems = [
   { path: "/sera", label: "Control Seră", icon: Warehouse },
   { path: "/panouri", label: "Panouri Solare", icon: Sun },
   { path: "/ai", label: "AI Lab", icon: ScanLine },
+  { path: "/ai-chat", label: "AI Chat", icon: MessageCircle },
   { path: "/agenti", label: "Agenți", icon: Bot },
   { path: "/rapoarte", label: "Rapoarte", icon: FileChartLine },
   { path: "/setari", label: "Setări", icon: Settings },
@@ -30,9 +44,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             className="md:hidden mr-3 hover:bg-muted/50"
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           >
-            {isSidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {isSidebarOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
           </Button>
-          
+
           <Link to="/" className="flex items-center gap-3 group">
             <div className="p-2 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
               <Sprout className="h-6 w-6 text-primary" />
@@ -64,7 +82,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.path;
-              
+
               return (
                 <Link
                   key={item.path}
@@ -94,9 +112,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         )}
 
         {/* Main content */}
-        <main className="flex-1 p-4 sm:p-6 md:p-8 lg:p-10">
-          {children}
-        </main>
+        <main className="flex-1 p-4 sm:p-6 md:p-8 lg:p-10">{children}</main>
       </div>
     </div>
   );

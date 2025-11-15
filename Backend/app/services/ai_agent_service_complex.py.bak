@@ -1,0 +1,312 @@
+"""AI Agent service using OpenRouter for natural language processing"""
+import httpx
+import json
+from typing import Dict, Any, List, Optional
+from datetime import datetime, timedelta
+
+from ..services.order_service import OrderService
+from ..services.inventory_service import InventoryService
+from ..services.crop_service import CropService
+from ..services.task_service import TaskService
+
+
+class AIAgentService:
+    """AI Agent that processes natural language queries using OpenRouter"""
+    
+    OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
+    OPENROUTER_API_KEY = "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"
+    MODEL = "openai/gpt-4o-mini"  # Foarte bun, rapid, excelent pentru română + function calling
+    
+    def __init__(self, db):
+        self.db = db
+        self.order_service = OrderService(db)
+        self.inventory_service = InventoryService(db)
+        self.crop_service = CropService(db)
+        self.task_service = TaskService(db)
+    
+    def _get_available_functions(self) -> List[Dict[str, Any]]:
+        """Define available functions for AI to call (tools format)"""
+        return [
+            {
+                "type": "function",
+                "function": {
+                    "name": "get_today_orders",
+                    "description": "Obține comenzile de astăzi pentru un fermier",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "farmer_id": {
+                                "type": "string",
+                                "description": "ID-ul fermierului"
+                            }
+                        },
+                        "required": ["farmer_id"]
+                    }
+                }
+            },
+            {
+                "name": "get_orders_statistics",
+                "description": "Obține statistici despre comenzi (total, venituri, etc.) pentru o perioadă",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "farmer_id": {"type": "string"},
+                        "period": {
+                            "type": "string",
+                            "enum": ["today", "week", "month", "all"],
+                            "description": "Perioada pentru statistici"
+                        }
+                    },
+                    "required": ["farmer_id", "period"]
+                }
+            },
+            {
+                "name": "get_inventory_value",
+                "description": "Obține valoarea totală a stocului/inventarului",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "farmer_id": {"type": "string"}
+                    },
+                    "required": ["farmer_id"]
+                }
+            },
+            {
+                "name": "get_inventory_items",
+                "description": "Obține lista produselor din inventar",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "farmer_id": {"type": "string"}
+                    },
+                    "required": ["farmer_id"]
+                }
+            },
+            {
+                "name": "get_today_tasks",
+                "description": "Obține task-urile de astăzi pentru un fermier",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "farmer_id": {"type": "string"}
+                    },
+                    "required": ["farmer_id"]
+                }
+            },
+            {
+                "name": "get_overdue_tasks",
+                "description": "Obține task-urile întârziate",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "farmer_id": {"type": "string"}
+                    },
+                    "required": ["farmer_id"]
+                }
+            },
+            {
+                "name": "get_pending_tasks",
+                "description": "Obține toate task-urile în așteptare (necompletate)",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "farmer_id": {"type": "string"}
+                    },
+                    "required": ["farmer_id"]
+                }
+            },
+            {
+                "name": "get_crops_list",
+                "description": "Obține lista culturilor fermierului",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "farmer_id": {"type": "string"}
+                    },
+                    "required": ["farmer_id"]
+                }
+            },
+            {
+                "name": "get_harvest_ready_crops",
+                "description": "Obține culturile gata de recoltat",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "farmer_id": {"type": "string"}
+                    },
+                    "required": ["farmer_id"]
+                }
+            }
+        ]
+    
+    async def _execute_function(self, function_name: str, arguments: Dict[str, Any]) -> Any:
+        """Execute a function call from AI"""
+        farmer_id = arguments.get("farmer_id")
+        
+        if function_name == "get_today_orders":
+            orders = await self.order_service.get_today_orders(farmer_id)
+            return [{"order_number": o.order_number, "customer": o.customer_name, 
+                    "amount": o.total_amount, "status": o.status} for o in orders]
+        
+        elif function_name == "get_orders_statistics":
+            period = arguments.get("period", "all")
+            start_date = None
+            
+            if period == "today":
+                start_date = datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
+            elif period == "week":
+                start_date = datetime.utcnow() - timedelta(days=7)
+            elif period == "month":
+                start_date = datetime.utcnow() - timedelta(days=30)
+            
+            stats = await self.order_service.get_orders_statistics(farmer_id, start_date)
+            return stats
+        
+        elif function_name == "get_inventory_value":
+            value = await self.inventory_service.get_inventory_value(farmer_id)
+            return {"total_value": value}
+        
+        elif function_name == "get_inventory_items":
+            items = await self.inventory_service.list_farmer_inventory(farmer_id)
+            return [{"product": i.product_name, "quantity": i.quantity, 
+                    "unit": i.unit, "value": i.total_value} for i in items]
+        
+        elif function_name == "get_today_tasks":
+            tasks = await self.task_service.get_today_tasks(farmer_id)
+            return [{"title": t.title, "priority": t.priority, "status": t.status} for t in tasks]
+        
+        elif function_name == "get_overdue_tasks":
+            tasks = await self.task_service.get_overdue_tasks(farmer_id)
+            return [{"title": t.title, "priority": t.priority, 
+                    "due_date": t.due_date.isoformat() if t.due_date else None} for t in tasks]
+        
+        elif function_name == "get_pending_tasks":
+            tasks = await self.task_service.get_pending_tasks(farmer_id)
+            return [{"title": t.title, "priority": t.priority, "status": t.status} for t in tasks]
+        
+        elif function_name == "get_crops_list":
+            crops = await self.crop_service.list_farmer_crops(farmer_id)
+            return [{"name": c.crop_name, "area": c.area_hectares, 
+                    "status": c.status, "days_until_harvest": c.days_until_harvest} for c in crops]
+        
+        elif function_name == "get_harvest_ready_crops":
+            crops = await self.crop_service.get_harvest_ready(farmer_id)
+            return [{"name": c.crop_name, "area": c.area_hectares, 
+                    "days_overdue": abs(c.days_until_harvest) if c.days_until_harvest and c.days_until_harvest < 0 else 0} 
+                   for c in crops]
+        
+        return None
+    
+    async def process_query(self, farmer_id: str, query: str, conversation_history: Optional[List] = None) -> Dict[str, Any]:
+        """Process natural language query using AI"""
+        
+        # Prepare messages for AI
+        messages = [
+            {
+                "role": "system",
+                "content": """Ești un asistent AI pentru fermieri în România. 
+Ajuți fermierii să obțină informații despre ferma lor: comenzi, inventar, culturi, task-uri.
+Răspunde ÎNTOTDEAUNA în limba română, natural și prietenos.
+Folosește funcțiile disponibile pentru a obține date reale din sistemul fermierului.
+Când prezinți numere, folosește formatul românesc (ex: 1.500 RON, nu 1500 RON).
+Fii concis dar util."""
+            }
+        ]
+        
+        # Add conversation history if exists
+        if conversation_history:
+            messages.extend(conversation_history)
+        
+        # Add current query
+        messages.append({
+            "role": "user",
+            "content": query
+        })
+        
+        try:
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                # First AI call - determine what functions to call
+                response = await client.post(
+                    self.OPENROUTER_API_URL,
+                    headers={
+                        "Authorization": f"Bearer {self.OPENROUTER_API_KEY}",
+                        "Content-Type": "application/json",
+                        "HTTP-Referer": "http://localhost:8000",
+                        "X-Title": "Farmer Assistant"
+                    },
+                    json={
+                        "model": self.MODEL,
+                        "messages": messages,
+                        "functions": self._get_available_functions(),
+                        "function_call": "auto"
+                    }
+                )
+                
+                response.raise_for_status()
+                ai_response = response.json()
+                
+                message = ai_response["choices"][0]["message"]
+                
+                # Check if AI wants to call a function
+                if message.get("function_call"):
+                    function_name = message["function_call"]["name"]
+                    function_args = json.loads(message["function_call"]["arguments"])
+                    
+                    # Inject farmer_id if not present
+                    if "farmer_id" not in function_args:
+                        function_args["farmer_id"] = farmer_id
+                    
+                    # Execute the function
+                    function_result = await self._execute_function(function_name, function_args)
+                    
+                    # Send function result back to AI for natural language response
+                    messages.append(message)
+                    messages.append({
+                        "role": "function",
+                        "name": function_name,
+                        "content": json.dumps(function_result, ensure_ascii=False)
+                    })
+                    
+                    # Get final response from AI
+                    final_response = await client.post(
+                        self.OPENROUTER_API_URL,
+                        headers={
+                            "Authorization": f"Bearer {self.OPENROUTER_API_KEY}",
+                            "Content-Type": "application/json",
+                            "HTTP-Referer": "http://localhost:8000",
+                            "X-Title": "Farmer Assistant"
+                        },
+                        json={
+                            "model": self.MODEL,
+                            "messages": messages
+                        }
+                    )
+                    
+                    final_response.raise_for_status()
+                    final_ai_response = final_response.json()
+                    
+                    answer = final_ai_response["choices"][0]["message"]["content"]
+                    
+                    return {
+                        "answer": answer,
+                        "data": function_result,
+                        "function_called": function_name,
+                        "success": True
+                    }
+                
+                # Direct answer without function call
+                return {
+                    "answer": message.get("content", "Nu am putut procesa întrebarea."),
+                    "data": None,
+                    "function_called": None,
+                    "success": True
+                }
+                
+        except Exception as e:
+            return {
+                "answer": f"Eroare la procesarea întrebării: {str(e)}",
+                "data": None,
+                "function_called": None,
+                "success": False,
+                "error": str(e)
+            }
