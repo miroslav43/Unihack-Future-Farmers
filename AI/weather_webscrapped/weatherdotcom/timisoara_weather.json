@@ -1,0 +1,254 @@
+[
+  {
+    "date": "10/26",
+    "temp_high": "14°C",
+    "temp_low": "6°C",
+    "weather": "Rain"
+  },
+  {
+    "date": "10/27",
+    "temp_high": "14°C",
+    "temp_low": "7°C",
+    "weather": "Partly Cloudy Day"
+  },
+  {
+    "date": "10/28",
+    "temp_high": "16°C",
+    "temp_low": "3°C",
+    "weather": "Partly Cloudy Day"
+  },
+  {
+    "date": "10/29",
+    "temp_high": "20°C",
+    "temp_low": "4°C",
+    "weather": "Partly Cloudy Day"
+  },
+  {
+    "date": "10/30",
+    "temp_high": "21°C",
+    "temp_low": "12°C",
+    "weather": "Partly Cloudy Day"
+  },
+  {
+    "date": "10/31",
+    "temp_high": "21°C",
+    "temp_low": "9°C",
+    "weather": "Partly Cloudy Day"
+  },
+  {
+    "date": "11/1",
+    "temp_high": "24°C",
+    "temp_low": "7°C",
+    "weather": "Mostly Clear Day"
+  },
+  {
+    "date": "11/2",
+    "temp_high": "23°C",
+    "temp_low": "9°C",
+    "weather": "Partly Cloudy Day"
+  },
+  {
+    "date": "11/3",
+    "temp_high": "20°C",
+    "temp_low": "5°C",
+    "weather": "Scattered Showers Day"
+  },
+  {
+    "date": "11/4",
+    "temp_high": "15°C",
+    "temp_low": "0°C",
+    "weather": "Partly Cloudy Day"
+  },
+  {
+    "date": "11/5",
+    "temp_high": "15°C",
+    "temp_low": "1°C",
+    "weather": "Foggy"
+  },
+  {
+    "date": "11/6",
+    "temp_high": "15°C",
+    "temp_low": "2°C",
+    "weather": "Rain"
+  },
+  {
+    "date": "11/7",
+    "temp_high": "16°C",
+    "temp_low": "8°C",
+    "weather": "Heavy Rain"
+  },
+  {
+    "date": "11/8",
+    "temp_high": "11°C",
+    "temp_low": "8°C",
+    "weather": "Heavy Rain"
+  },
+  {
+    "date": "11/9",
+    "temp_high": "11°C",
+    "temp_low": "7°C",
+    "weather": "Rain"
+  },
+  {
+    "date": "11/10",
+    "temp_high": "10°C",
+    "temp_low": "3°C",
+    "weather": "Heavy Rain"
+  },
+  {
+    "date": "11/11",
+    "temp_high": "7°C",
+    "temp_low": "5°C",
+    "weather": "Foggy"
+  },
+  {
+    "date": "11/12",
+    "temp_high": "9°C",
+    "temp_low": "0°C",
+    "weather": "Heavy Rain"
+  },
+  {
+    "date": "11/13",
+    "temp_high": "7°C",
+    "temp_low": "0°C",
+    "weather": "Foggy"
+  },
+  {
+    "date": "11/14",
+    "temp_high": "17°C",
+    "temp_low": "2°C",
+    "weather": "Partly Cloudy Day"
+  },
+  {
+    "date": "11/15",
+    "temp_high": "--°C",
+    "temp_low": "6°C",
+    "weather": "Partly Cloudy Night"
+  },
+  {
+    "date": "11/16",
+    "temp_high": "17°C",
+    "temp_low": "10°C",
+    "weather": "Cloudy"
+  },
+  {
+    "date": "11/17",
+    "temp_high": "19°C",
+    "temp_low": "5°C",
+    "weather": "Rain"
+  },
+  {
+    "date": "11/18",
+    "temp_high": "8°C",
+    "temp_low": "1°C",
+    "weather": "Cloudy"
+  },
+  {
+    "date": "11/19",
+    "temp_high": "7°C",
+    "temp_low": "3°C",
+    "weather": "Scattered Showers Day"
+  },
+  {
+    "date": "11/20",
+    "temp_high": "13°C",
+    "temp_low": "7°C",
+    "weather": "Partly Cloudy Day"
+  },
+  {
+    "date": "11/21",
+    "temp_high": "13°C",
+    "temp_low": "4°C",
+    "weather": "Rain"
+  },
+  {
+    "date": "11/22",
+    "temp_high": "7°C",
+    "temp_low": "1°C",
+    "weather": "Showers"
+  },
+  {
+    "date": "11/23",
+    "temp_high": "6°C",
+    "temp_low": "2°C",
+    "weather": "Scattered Showers Day"
+  },
+  {
+    "date": "11/24",
+    "temp_high": "8°C",
+    "temp_low": "2°C",
+    "weather": "Scattered Showers Day"
+  },
+  {
+    "date": "11/25",
+    "temp_high": "8°C",
+    "temp_low": "2°C",
+    "weather": "Showers"
+  },
+  {
+    "date": "11/26",
+    "temp_high": "7°C",
+    "temp_low": "1°C",
+    "weather": "Showers"
+  },
+  {
+    "date": "11/27",
+    "temp_high": "8°C",
+    "temp_low": "1°C",
+    "weather": "Scattered Showers Day"
+  },
+  {
+    "date": "11/28",
+    "temp_high": "8°C",
+    "temp_low": "1°C",
+    "weather": "Showers"
+  },
+  {
+    "date": "11/29",
+    "temp_high": "7°C",
+    "temp_low": "1°C",
+    "weather": "Rain Snow Wintery Mix"
+  },
+  {
+    "date": "11/30",
+    "temp_high": "7°C",
+    "temp_low": "0°C",
+    "weather": "N/A"
+  },
+  {
+    "date": "12/1",
+    "temp_high": "7°C",
+    "temp_low": "0°C",
+    "weather": "N/A"
+  },
+  {
+    "date": "12/2",
+    "temp_high": "7°C",
+    "temp_low": "-1°C",
+    "weather": "N/A"
+  },
+  {
+    "date": "12/3",
+    "temp_high": "6°C",
+    "temp_low": "-1°C",
+    "weather": "N/A"
+  },
+  {
+    "date": "12/4",
+    "temp_high": "6°C",
+    "temp_low": "-1°C",
+    "weather": "N/A"
+  },
+  {
+    "date": "12/5",
+    "temp_high": "6°C",
+    "temp_low": "-1°C",
+    "weather": "N/A"
+  },
+  {
+    "date": "12/6",
+    "temp_high": "6°C",
+    "temp_low": "-1°C",
+    "weather": "N/A"
+  }
+]

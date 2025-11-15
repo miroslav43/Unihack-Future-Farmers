@@ -1,0 +1,882 @@
+{
+  "location": "Timisoara, Romania",
+  "temperature_unit": "Celsius",
+  "merged_date": "2025-11-16 00:26:07",
+  "total_days": 92,
+  "sources": [
+    "AccuWeather",
+    "Weather.com"
+  ],
+  "note": "When data from both sources is available for the same day, temperatures are averaged",
+  "data": [
+    {
+      "date": "2025-10-01",
+      "max_temp_celsius": 24.0,
+      "min_temp_celsius": 9.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-10-02",
+      "max_temp_celsius": 13.0,
+      "min_temp_celsius": 4.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-10-03",
+      "max_temp_celsius": 11.0,
+      "min_temp_celsius": 6.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-10-04",
+      "max_temp_celsius": 11.0,
+      "min_temp_celsius": 5.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-10-05",
+      "max_temp_celsius": 14.0,
+      "min_temp_celsius": 5.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-10-06",
+      "max_temp_celsius": 17.0,
+      "min_temp_celsius": 7.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-10-07",
+      "max_temp_celsius": 18.0,
+      "min_temp_celsius": 5.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-10-08",
+      "max_temp_celsius": 18.0,
+      "min_temp_celsius": 7.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-10-09",
+      "max_temp_celsius": 19.0,
+      "min_temp_celsius": 7.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-10-10",
+      "max_temp_celsius": 20.0,
+      "min_temp_celsius": 10.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-10-11",
+      "max_temp_celsius": 19.0,
+      "min_temp_celsius": 11.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-10-12",
+      "max_temp_celsius": 19.0,
+      "min_temp_celsius": 7.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-10-13",
+      "max_temp_celsius": 17.0,
+      "min_temp_celsius": 8.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-10-14",
+      "max_temp_celsius": 19.0,
+      "min_temp_celsius": 7.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-10-15",
+      "max_temp_celsius": 17.0,
+      "min_temp_celsius": 5.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-10-16",
+      "max_temp_celsius": 18.0,
+      "min_temp_celsius": 3.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-10-17",
+      "max_temp_celsius": 18.0,
+      "min_temp_celsius": 5.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-10-18",
+      "max_temp_celsius": 19.0,
+      "min_temp_celsius": 5.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-10-19",
+      "max_temp_celsius": 15.0,
+      "min_temp_celsius": 1.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-10-20",
+      "max_temp_celsius": 17.0,
+      "min_temp_celsius": 1.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-10-21",
+      "max_temp_celsius": 18.0,
+      "min_temp_celsius": 6.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-10-22",
+      "max_temp_celsius": 23.0,
+      "min_temp_celsius": 7.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-10-23",
+      "max_temp_celsius": 24.0,
+      "min_temp_celsius": 10.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-10-24",
+      "max_temp_celsius": 18.0,
+      "min_temp_celsius": 6.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-10-25",
+      "max_temp_celsius": 16.0,
+      "min_temp_celsius": 2.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-10-26",
+      "max_temp_celsius": 14.0,
+      "min_temp_celsius": 8.0,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "Weather.com: Rain"
+    },
+    {
+      "date": "2025-10-27",
+      "max_temp_celsius": 14.5,
+      "min_temp_celsius": 6.5,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "Weather.com: Partly Cloudy Day"
+    },
+    {
+      "date": "2025-10-28",
+      "max_temp_celsius": 16.0,
+      "min_temp_celsius": 4.5,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "Weather.com: Partly Cloudy Day"
+    },
+    {
+      "date": "2025-10-29",
+      "max_temp_celsius": 19.5,
+      "min_temp_celsius": 3.5,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "Weather.com: Partly Cloudy Day"
+    },
+    {
+      "date": "2025-10-30",
+      "max_temp_celsius": 21.5,
+      "min_temp_celsius": 8.0,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "Weather.com: Partly Cloudy Day"
+    },
+    {
+      "date": "2025-10-31",
+      "max_temp_celsius": 21.0,
+      "min_temp_celsius": 10.0,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "Weather.com: Partly Cloudy Day"
+    },
+    {
+      "date": "2025-11-01",
+      "max_temp_celsius": 16.5,
+      "min_temp_celsius": 5.0,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: Noros | Weather.com: Mostly Clear Day"
+    },
+    {
+      "date": "2025-11-02",
+      "max_temp_celsius": 16.0,
+      "min_temp_celsius": 6.5,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: Perioade de ploaie | Weather.com: Partly Cloudy Day"
+    },
+    {
+      "date": "2025-11-03",
+      "max_temp_celsius": 14.5,
+      "min_temp_celsius": 4.5,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: Perioade de ploaie | Weather.com: Scattered Showers Day"
+    },
+    {
+      "date": "2025-11-04",
+      "max_temp_celsius": 12.5,
+      "min_temp_celsius": 2.0,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: Perioade de ploaie | Weather.com: Partly Cloudy Day"
+    },
+    {
+      "date": "2025-11-05",
+      "max_temp_celsius": 12.5,
+      "min_temp_celsius": 2.5,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: Câteva averse | Weather.com: Foggy"
+    },
+    {
+      "date": "2025-11-06",
+      "max_temp_celsius": 11.5,
+      "min_temp_celsius": 2.5,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: Perioade de ploaie | Weather.com: Rain"
+    },
+    {
+      "date": "2025-11-07",
+      "max_temp_celsius": 16.5,
+      "min_temp_celsius": 5.5,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "Weather.com: Heavy Rain"
+    },
+    {
+      "date": "2025-11-08",
+      "max_temp_celsius": 11.0,
+      "min_temp_celsius": 8.5,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "Weather.com: Heavy Rain"
+    },
+    {
+      "date": "2025-11-09",
+      "max_temp_celsius": 11.0,
+      "min_temp_celsius": 8.0,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "Weather.com: Rain"
+    },
+    {
+      "date": "2025-11-10",
+      "max_temp_celsius": 10.5,
+      "min_temp_celsius": 4.5,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "Weather.com: Heavy Rain"
+    },
+    {
+      "date": "2025-11-11",
+      "max_temp_celsius": 7.0,
+      "min_temp_celsius": 4.5,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "Weather.com: Foggy"
+    },
+    {
+      "date": "2025-11-12",
+      "max_temp_celsius": 9.5,
+      "min_temp_celsius": 1.0,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "Weather.com: Heavy Rain"
+    },
+    {
+      "date": "2025-11-13",
+      "max_temp_celsius": 7.0,
+      "min_temp_celsius": 0.5,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "Weather.com: Foggy"
+    },
+    {
+      "date": "2025-11-14",
+      "max_temp_celsius": 17.0,
+      "min_temp_celsius": 1.5,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "Weather.com: Partly Cloudy Day"
+    },
+    {
+      "date": "2025-11-15",
+      "max_temp_celsius": 16.0,
+      "min_temp_celsius": 6.0,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: Soare cu nori | Weather.com: Partly Cloudy Night"
+    },
+    {
+      "date": "2025-11-16",
+      "max_temp_celsius": 16.5,
+      "min_temp_celsius": 9.0,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: Nori şi soare | Weather.com: Cloudy"
+    },
+    {
+      "date": "2025-11-17",
+      "max_temp_celsius": 19.0,
+      "min_temp_celsius": 5.5,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: O aversă | Weather.com: Rain"
+    },
+    {
+      "date": "2025-11-18",
+      "max_temp_celsius": 8.0,
+      "min_temp_celsius": 1.5,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: Mult mai răcoros | Weather.com: Cloudy"
+    },
+    {
+      "date": "2025-11-19",
+      "max_temp_celsius": 7.0,
+      "min_temp_celsius": 2.5,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: Noros | Weather.com: Scattered Showers Day"
+    },
+    {
+      "date": "2025-11-20",
+      "max_temp_celsius": 13.0,
+      "min_temp_celsius": 6.0,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: Mai cald | Weather.com: Partly Cloudy Day"
+    },
+    {
+      "date": "2025-11-21",
+      "max_temp_celsius": 13.5,
+      "min_temp_celsius": 5.5,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: Înnorare accentuată | Weather.com: Rain"
+    },
+    {
+      "date": "2025-11-22",
+      "max_temp_celsius": 8.0,
+      "min_temp_celsius": 2.5,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: Ploaie scurtă | Weather.com: Showers"
+    },
+    {
+      "date": "2025-11-23",
+      "max_temp_celsius": 7.0,
+      "min_temp_celsius": 2.0,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: Perioade de ploaie | Weather.com: Scattered Showers Day"
+    },
+    {
+      "date": "2025-11-24",
+      "max_temp_celsius": 9.0,
+      "min_temp_celsius": 3.0,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: Înnorare accentuată | Weather.com: Scattered Showers Day"
+    },
+    {
+      "date": "2025-11-25",
+      "max_temp_celsius": 8.0,
+      "min_temp_celsius": 2.5,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: Predominant noros | Weather.com: Showers"
+    },
+    {
+      "date": "2025-11-26",
+      "max_temp_celsius": 8.0,
+      "min_temp_celsius": 1.0,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: Ploaie scurtă | Weather.com: Showers"
+    },
+    {
+      "date": "2025-11-27",
+      "max_temp_celsius": 8.5,
+      "min_temp_celsius": 2.0,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: Ploaie scurtă | Weather.com: Scattered Showers Day"
+    },
+    {
+      "date": "2025-11-28",
+      "max_temp_celsius": 9.5,
+      "min_temp_celsius": 0.5,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: Nori şi soare | Weather.com: Showers"
+    },
+    {
+      "date": "2025-11-29",
+      "max_temp_celsius": 8.5,
+      "min_temp_celsius": 1.0,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: Noros | Weather.com: Rain Snow Wintery Mix"
+    },
+    {
+      "date": "2025-11-30",
+      "max_temp_celsius": 7.0,
+      "min_temp_celsius": 0.0,
+      "data_sources": [
+        "weather.com"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-11-31",
+      "max_temp_celsius": 21.0,
+      "min_temp_celsius": 11.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": null
+    },
+    {
+      "date": "2025-12-01",
+      "max_temp_celsius": 5.0,
+      "min_temp_celsius": -1.5,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: Parţial însorit"
+    },
+    {
+      "date": "2025-12-02",
+      "max_temp_celsius": 4.5,
+      "min_temp_celsius": -1.0,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: Predominant însorit"
+    },
+    {
+      "date": "2025-12-03",
+      "max_temp_celsius": 4.5,
+      "min_temp_celsius": -0.5,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: Ploaie şi ploaie îngheţată"
+    },
+    {
+      "date": "2025-12-04",
+      "max_temp_celsius": 8.0,
+      "min_temp_celsius": 1.5,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: Perioade de ploaie"
+    },
+    {
+      "date": "2025-12-05",
+      "max_temp_celsius": 8.0,
+      "min_temp_celsius": 1.5,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: Câteva averse"
+    },
+    {
+      "date": "2025-12-06",
+      "max_temp_celsius": 7.0,
+      "min_temp_celsius": 1.0,
+      "data_sources": [
+        "accuweather",
+        "weather.com"
+      ],
+      "weather_description": "AccuWeather: Perioade de ploaie"
+    },
+    {
+      "date": "2025-12-07",
+      "max_temp_celsius": 6.0,
+      "min_temp_celsius": 0.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": "Rămâne noros"
+    },
+    {
+      "date": "2025-12-08",
+      "max_temp_celsius": 6.0,
+      "min_temp_celsius": -1.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": "Nori şi soare"
+    },
+    {
+      "date": "2025-12-09",
+      "max_temp_celsius": 6.0,
+      "min_temp_celsius": 2.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": "Noros"
+    },
+    {
+      "date": "2025-12-10",
+      "max_temp_celsius": 6.0,
+      "min_temp_celsius": 0.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": "Predominant noros"
+    },
+    {
+      "date": "2025-12-11",
+      "max_temp_celsius": 9.0,
+      "min_temp_celsius": 0.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": "Nori şi soare"
+    },
+    {
+      "date": "2025-12-12",
+      "max_temp_celsius": 7.0,
+      "min_temp_celsius": 0.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": "Predominant noros"
+    },
+    {
+      "date": "2025-12-13",
+      "max_temp_celsius": 8.0,
+      "min_temp_celsius": -1.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": "Înnorare accentuată"
+    },
+    {
+      "date": "2025-12-14",
+      "max_temp_celsius": 7.0,
+      "min_temp_celsius": 2.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": "Noros"
+    },
+    {
+      "date": "2025-12-15",
+      "max_temp_celsius": 8.0,
+      "min_temp_celsius": 3.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": "Ploaie scurtă"
+    },
+    {
+      "date": "2025-12-16",
+      "max_temp_celsius": 8.0,
+      "min_temp_celsius": 2.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": "Câteva averse"
+    },
+    {
+      "date": "2025-12-17",
+      "max_temp_celsius": 8.0,
+      "min_temp_celsius": 2.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": "Nori şi soare"
+    },
+    {
+      "date": "2025-12-18",
+      "max_temp_celsius": 7.0,
+      "min_temp_celsius": 2.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": "Ploaie în descreştere"
+    },
+    {
+      "date": "2025-12-19",
+      "max_temp_celsius": 9.0,
+      "min_temp_celsius": 3.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": "Nori şi soare"
+    },
+    {
+      "date": "2025-12-20",
+      "max_temp_celsius": 8.0,
+      "min_temp_celsius": 2.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": "Perioade de ploaie"
+    },
+    {
+      "date": "2025-12-21",
+      "max_temp_celsius": 8.0,
+      "min_temp_celsius": -2.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": "Noros"
+    },
+    {
+      "date": "2025-12-22",
+      "max_temp_celsius": 3.0,
+      "min_temp_celsius": -4.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": "Norii se risipesc"
+    },
+    {
+      "date": "2025-12-23",
+      "max_temp_celsius": 1.0,
+      "min_temp_celsius": -5.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": "Parţial însorit"
+    },
+    {
+      "date": "2025-12-24",
+      "max_temp_celsius": 1.0,
+      "min_temp_celsius": -4.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": "Înnorare accentuată"
+    },
+    {
+      "date": "2025-12-25",
+      "max_temp_celsius": 2.0,
+      "min_temp_celsius": -5.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": "Perioade de ninsoare"
+    },
+    {
+      "date": "2025-12-26",
+      "max_temp_celsius": 1.0,
+      "min_temp_celsius": -6.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": "Parţial însorit"
+    },
+    {
+      "date": "2025-12-27",
+      "max_temp_celsius": 0.0,
+      "min_temp_celsius": -5.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": "Parţial însorit"
+    },
+    {
+      "date": "2025-12-28",
+      "max_temp_celsius": 0.0,
+      "min_temp_celsius": -5.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": "Şanse de ninsoare"
+    },
+    {
+      "date": "2025-12-29",
+      "max_temp_celsius": 6.0,
+      "min_temp_celsius": 1.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": "Ploaie scurtă"
+    },
+    {
+      "date": "2025-12-31",
+      "max_temp_celsius": 6.0,
+      "min_temp_celsius": -4.0,
+      "data_sources": [
+        "accuweather"
+      ],
+      "weather_description": "Nori joşi"
+    }
+  ]
+}
