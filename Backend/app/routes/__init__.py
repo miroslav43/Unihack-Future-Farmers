@@ -9,7 +9,8 @@ from . import (
     crop_routes,
     task_routes,
     conversational_routes,
-    ai_chat_routes
+    ai_chat_routes,
+    harvest_routes
 )
 
 __all__ = [
@@ -22,5 +23,6 @@ __all__ = [
     "crop_routes",
     "task_routes",
     "conversational_routes",
-    "ai_chat_routes"
+    "ai_chat_routes",
+    "harvest_routes"
 ]
