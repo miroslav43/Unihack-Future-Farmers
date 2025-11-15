@@ -65,6 +65,11 @@ class DatabaseManager:
         await self.db.applications.create_index("application_type")
         await self.db.applications.create_index("status")
         
+        # Harvest logs collection indexes
+        await self.db.harvest_logs.create_index("date", unique=True)
+        await self.db.harvest_logs.create_index([("date", -1)])
+        await self.db.harvest_logs.create_index("equipment.farmer_id")
+        
         logger.info("Database indexes created successfully")
     
     def get_database(self) -> AsyncIOMotorDatabase:

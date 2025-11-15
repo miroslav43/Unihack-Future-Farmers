@@ -18,7 +18,8 @@ from .routes import (
     crop_routes,
     task_routes,
     conversational_routes,
-    ai_chat_routes
+    ai_chat_routes,
+    harvest_routes
 )
 
 # Configure logging
@@ -129,6 +130,7 @@ app.include_router(crop_routes.router, prefix=settings.API_V1_PREFIX)
 app.include_router(task_routes.router, prefix=settings.API_V1_PREFIX)
 app.include_router(conversational_routes.router, prefix=settings.API_V1_PREFIX)
 app.include_router(ai_chat_routes.router, prefix=settings.API_V1_PREFIX)
+app.include_router(harvest_routes.router, prefix=settings.API_V1_PREFIX)
 
 
 if __name__ == "__main__":

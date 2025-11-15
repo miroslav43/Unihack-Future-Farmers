@@ -22,6 +22,10 @@ class FarmerBase(BaseModel):
     phone: str = Field(..., min_length=10, max_length=15)
     age: int = Field(..., ge=18, le=100)
     
+    # Worker information (from oameni.json)
+    role: Optional[str] = None  # Role: Farm Manager, Tractor Driver, etc.
+    payday: Optional[int] = Field(None, ge=1, le=31)  # Day of month for payment
+    
     # Agricultural information
     experience_years: int = Field(..., ge=0, le=80)
     experience_level: ExperienceLevel = ExperienceLevel.BEGINNER
@@ -62,6 +66,8 @@ class FarmerUpdate(BaseModel):
     last_name: Optional[str] = Field(None, min_length=2, max_length=100)
     email: Optional[EmailStr] = None
     phone: Optional[str] = Field(None, min_length=10, max_length=15)
+    role: Optional[str] = None
+    payday: Optional[int] = Field(None, ge=1, le=31)
     experience_years: Optional[int] = Field(None, ge=0, le=80)
     experience_level: Optional[ExperienceLevel] = None
     total_parcels: Optional[int] = Field(None, ge=0)

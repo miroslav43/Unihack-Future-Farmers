@@ -15,7 +15,7 @@ class ApplicationType(str, Enum):
     OTHER = "other"
 
 
-class ApplicationStatus(str, Enum):
+class ApplicationStatus(str, Enum): 
     """Application processing status"""
     DRAFT = "draft"
     GENERATED = "generated"
