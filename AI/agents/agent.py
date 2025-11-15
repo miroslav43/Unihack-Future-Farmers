@@ -4,7 +4,7 @@ from agno.agent import Agent
 from agno.team import Team
 from agno.models.base import Model
 
-# from tools import AGENT1, AGENT2, AGENT3
+from agents.tools import AGENT1, AGENT2, AGENT3
 
 from models.model import get_gemini_model, get_openrouter_model
 
@@ -52,7 +52,7 @@ def build_farmers_team(agent1_model: Model,
     from agno.models.openrouter import OpenRouter
     
     return Team(
-        tools=[],
+        tools=[AGENT1, AGENT2, AGENT3],
         # model=OpenRouter(id="gpt-5-mini"),
         model = get_openrouter_model(),
         

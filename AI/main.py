@@ -16,7 +16,7 @@ async def main():
 
     agent = build_farmers_team(model_agent1, model_agent2, model_agent3, team_model)
 
-    await agent.aprint_response("What day is today?")
+    await agent.aprint_response("List me the tools that you got.")
 
     await AGENT3.close()
     await AGENT2.close()
