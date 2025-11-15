@@ -181,10 +181,14 @@ class HarvestService:
             {"$group": {
                 "_id": None,
                 "total_days": {"$sum": 1},
-                "total_wheat_sown": {"$sum": "$wheat_sown_hectares"},
+                "total_wheat_harvested": {"$sum": "$wheat_harvested_hectares"},
                 "total_sunflower_harvested": {"$sum": "$sunflower_harvested_hectares"},
                 "total_beans_harvested": {"$sum": "$beans_harvested_hectares"},
                 "total_tomatoes_harvested": {"$sum": "$tomatoes_harvested_hectares"},
+                "total_wheat_kg": {"$sum": "$wheat_harvested_kg"},
+                "total_sunflower_kg": {"$sum": "$sunflower_harvested_kg"},
+                "total_beans_kg": {"$sum": "$beans_harvested_kg"},
+                "total_tomatoes_kg": {"$sum": "$tomatoes_harvested_kg"},
                 "total_work_hours": {"$sum": "$equipment.work_hours"},
                 "total_fuel_consumed": {"$sum": "$equipment.fuel_consumed_liters"},
                 "avg_oil_price": {"$avg": "$oil_price_per_liter"}
@@ -200,10 +204,14 @@ class HarvestService:
             
             return {
                 "total_days": stats["total_days"],
-                "total_wheat_sown_hectares": round(stats["total_wheat_sown"] or 0, 2),
+                "total_wheat_harvested_hectares": round(stats["total_wheat_harvested"] or 0, 2),
                 "total_sunflower_harvested_hectares": round(stats["total_sunflower_harvested"] or 0, 2),
                 "total_beans_harvested_hectares": round(stats["total_beans_harvested"] or 0, 2),
                 "total_tomatoes_harvested_hectares": round(stats["total_tomatoes_harvested"] or 0, 2),
+                "total_wheat_harvested_kg": round(stats["total_wheat_kg"] or 0, 2),
+                "total_sunflower_harvested_kg": round(stats["total_sunflower_kg"] or 0, 2),
+                "total_beans_harvested_kg": round(stats["total_beans_kg"] or 0, 2),
+                "total_tomatoes_harvested_kg": round(stats["total_tomatoes_kg"] or 0, 2),
                 "total_work_hours": round(stats["total_work_hours"] or 0, 2),
                 "total_fuel_consumed_liters": round(total_fuel, 2),
                 "total_fuel_cost": round(total_fuel * avg_price, 2),
@@ -212,10 +220,14 @@ class HarvestService:
         
         return {
             "total_days": 0,
-            "total_wheat_sown_hectares": 0.0,
+            "total_wheat_harvested_hectares": 0.0,
             "total_sunflower_harvested_hectares": 0.0,
             "total_beans_harvested_hectares": 0.0,
             "total_tomatoes_harvested_hectares": 0.0,
+            "total_wheat_harvested_kg": 0.0,
+            "total_sunflower_harvested_kg": 0.0,
+            "total_beans_harvested_kg": 0.0,
+            "total_tomatoes_harvested_kg": 0.0,
             "total_work_hours": 0.0,
             "total_fuel_consumed_liters": 0.0,
             "total_fuel_cost": 0.0,
@@ -302,12 +314,20 @@ class HarvestService:
     @staticmethod
     def _add_computed_fields(log_dict: dict) -> dict:
         """Calculate and add computed fields to log"""
-        # Total hectares
-        log_dict["total_hectares_sown"] = log_dict.get("wheat_sown_hectares", 0)
+        # Total hectares harvested
         log_dict["total_hectares_harvested"] = (
+            log_dict.get("wheat_harvested_hectares", 0) +
             log_dict.get("sunflower_harvested_hectares", 0) +
             log_dict.get("beans_harvested_hectares", 0) +
             log_dict.get("tomatoes_harvested_hectares", 0)
+        )
+        
+        # Total kg harvested
+        log_dict["total_kg_harvested"] = (
+            log_dict.get("wheat_harvested_kg", 0) +
+            log_dict.get("sunflower_harvested_kg", 0) +
+            log_dict.get("beans_harvested_kg", 0) +
+            log_dict.get("tomatoes_harvested_kg", 0)
         )
         
         # Equipment totals
