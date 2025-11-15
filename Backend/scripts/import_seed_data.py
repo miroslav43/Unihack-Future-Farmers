@@ -107,8 +107,14 @@ async def import_harvest_logs(db, harvest_data: list):
     print("\n📥 Importing harvest logs...")
     
     harvest_collection = db.harvest_logs
+    farmers_collection = db.farmers
     inserted_count = 0
     updated_count = 0
+    
+    # Build mapping from worker_id to farmer ObjectId
+    worker_id_to_farmer_id = {}
+    async for farmer in farmers_collection.find({"worker_id": {"$exists": True}}):
+        worker_id_to_farmer_id[farmer["worker_id"]] = str(farmer["_id"])
     
     for log_entry in harvest_data:
         # Extract date
@@ -118,23 +124,41 @@ async def import_harvest_logs(db, harvest_data: list):
         # Check if log for this date already exists
         existing = await harvest_collection.find_one({"date": log_date})
         
-        # Prepare equipment list
+        # Prepare equipment list with farmer_id mapping
         equipment_list = []
         for eq in log_entry.get("equipment", []):
-            equipment_list.append({
-                "equipment_type": eq.get("equipment_type", "Unknown"),
-                "worker_id": eq.get("worker_id", 0),
-                "work_hours": float(eq.get("work_hours", 0)),
-                "fuel_consumed_liters": float(eq.get("fuel_consumed_liters", 0))
-            })
+            worker_id = eq.get("worker_id", 0)
+            farmer_id = worker_id_to_farmer_id.get(worker_id)
+            
+            if farmer_id:
+                equipment_list.append({
+                    "equipment_type": eq.get("equipment_type", "Unknown"),
+                    "farmer_id": farmer_id,
+                    "work_hours": float(eq.get("work_hours", 0)),
+                    "fuel_consumed_liters": float(eq.get("fuel_consumed_liters", 0))
+                })
+            else:
+                print(f"  ⚠ Warning: worker_id {worker_id} not found in farmers, skipping equipment entry")
+        
+        # Calculate realistic kg harvested based on hectares
+        # Average yields per hectare in Romania:
+        # Wheat: 4000 kg/ha, Sunflower: 2000 kg/ha, Beans: 2000 kg/ha, Tomatoes: 50000 kg/ha
+        wheat_hectares = float(log_entry.get("wheat_sown_hectares", 0))
+        sunflower_hectares = float(log_entry.get("sunflower_harvested_hectares", 0))
+        beans_hectares = float(log_entry.get("beans_harvested_hectares", 0))
+        tomatoes_hectares = float(log_entry.get("tomatoes_harvested_hectares", 0))
         
         harvest_doc = {
             "date": log_date,
             "notes": log_entry.get("notes", ""),
-            "wheat_sown_hectares": float(log_entry.get("wheat_sown_hectares", 0)),
-            "sunflower_harvested_hectares": float(log_entry.get("sunflower_harvested_hectares", 0)),
-            "beans_harvested_hectares": float(log_entry.get("beans_harvested_hectares", 0)),
-            "tomatoes_harvested_hectares": float(log_entry.get("tomatoes_harvested_hectares", 0)),
+            "wheat_harvested_hectares": wheat_hectares,
+            "sunflower_harvested_hectares": sunflower_hectares,
+            "beans_harvested_hectares": beans_hectares,
+            "tomatoes_harvested_hectares": tomatoes_hectares,
+            "wheat_harvested_kg": round(wheat_hectares * 4000, 2),
+            "sunflower_harvested_kg": round(sunflower_hectares * 2000, 2),
+            "beans_harvested_kg": round(beans_hectares * 2000, 2),
+            "tomatoes_harvested_kg": round(tomatoes_hectares * 50000, 2),
             "oil_price_per_liter": float(log_entry.get("oil_price_per_liter", 0)),
             "equipment": equipment_list,
             "farmer_id": None,  # Can be linked later if needed

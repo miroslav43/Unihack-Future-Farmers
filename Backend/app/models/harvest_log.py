@@ -28,11 +28,17 @@ class HarvestLogBase(BaseModel):
     date: date
     notes: Optional[str] = None
     
-    # Crops - sown/harvested hectares
-    wheat_sown_hectares: float = Field(default=0.0, ge=0)
+    # Hectare recoltate pentru fiecare cultura
+    wheat_harvested_hectares: float = Field(default=0.0, ge=0)
     sunflower_harvested_hectares: float = Field(default=0.0, ge=0)
     beans_harvested_hectares: float = Field(default=0.0, ge=0)
     tomatoes_harvested_hectares: float = Field(default=0.0, ge=0)
+    
+    # Kilograme recoltate pentru fiecare cultura
+    wheat_harvested_kg: float = Field(default=0.0, ge=0)
+    sunflower_harvested_kg: float = Field(default=0.0, ge=0)
+    beans_harvested_kg: float = Field(default=0.0, ge=0)
+    tomatoes_harvested_kg: float = Field(default=0.0, ge=0)
     
     # Pricing
     oil_price_per_liter: float = Field(default=0.0, ge=0)
@@ -49,10 +55,14 @@ class HarvestLogCreate(HarvestLogBase):
             "example": {
                 "date": "2025-11-15",
                 "notes": "Normal work day",
-                "wheat_sown_hectares": 8.5,
-                "sunflower_harvested_hectares": 2.3,
-                "beans_harvested_hectares": 1.2,
+                "wheat_harvested_hectares": 2.5,
+                "sunflower_harvested_hectares": 1.3,
+                "beans_harvested_hectares": 0.8,
                 "tomatoes_harvested_hectares": 0.5,
+                "wheat_harvested_kg": 10000,
+                "sunflower_harvested_kg": 2600,
+                "beans_harvested_kg": 1600,
+                "tomatoes_harvested_kg": 25000,
                 "oil_price_per_liter": 6.5,
                 "equipment": [
                     {
@@ -69,10 +79,14 @@ class HarvestLogCreate(HarvestLogBase):
 class HarvestLogUpdate(BaseModel):
     """Harvest log update model - all fields optional"""
     notes: Optional[str] = None
-    wheat_sown_hectares: Optional[float] = Field(None, ge=0)
+    wheat_harvested_hectares: Optional[float] = Field(None, ge=0)
     sunflower_harvested_hectares: Optional[float] = Field(None, ge=0)
     beans_harvested_hectares: Optional[float] = Field(None, ge=0)
     tomatoes_harvested_hectares: Optional[float] = Field(None, ge=0)
+    wheat_harvested_kg: Optional[float] = Field(None, ge=0)
+    sunflower_harvested_kg: Optional[float] = Field(None, ge=0)
+    beans_harvested_kg: Optional[float] = Field(None, ge=0)
+    tomatoes_harvested_kg: Optional[float] = Field(None, ge=0)
     oil_price_per_liter: Optional[float] = Field(None, ge=0)
     equipment: Optional[List[EquipmentUsage]] = None
 
@@ -82,8 +96,8 @@ class HarvestLogResponse(HarvestLogBase):
     id: str = Field(..., alias="_id")
     
     # Computed fields
-    total_hectares_sown: float = 0.0
     total_hectares_harvested: float = 0.0
+    total_kg_harvested: float = 0.0
     total_work_hours: float = 0.0
     total_fuel_consumed: float = 0.0
     fuel_cost: float = 0.0
@@ -98,21 +112,25 @@ class HarvestLogResponse(HarvestLogBase):
                 "_id": "507f1f77bcf86cd799439015",
                 "date": "2025-11-15",
                 "notes": "Normal work day",
-                "wheat_sown_hectares": 8.57,
-                "sunflower_harvested_hectares": 0.82,
-                "beans_harvested_hectares": 1.23,
-                "tomatoes_harvested_hectares": 0.62,
+                "wheat_harvested_hectares": 2.5,
+                "sunflower_harvested_hectares": 1.3,
+                "beans_harvested_hectares": 0.8,
+                "tomatoes_harvested_hectares": 0.5,
+                "wheat_harvested_kg": 10000,
+                "sunflower_harvested_kg": 2600,
+                "beans_harvested_kg": 1600,
+                "tomatoes_harvested_kg": 25000,
                 "oil_price_per_liter": 6.81,
                 "equipment": [
                     {
                         "equipment_type": "Tractor",
                         "farmer_id": "507f1f77bcf86cd799439011",
-                        "work_hours": 0.71,
-                        "fuel_consumed_liters": 16.3
+                        "work_hours": 8.0,
+                        "fuel_consumed_liters": 45.5
                     }
                 ],
-                "total_hectares_sown": 8.57,
-                "total_hectares_harvested": 2.67,
+                "total_hectares_harvested": 5.1,
+                "total_kg_harvested": 39200,
                 "total_work_hours": 12.57,
                 "total_fuel_consumed": 518.2,
                 "fuel_cost": 3528.94,
