@@ -1,7 +1,7 @@
 from agno.tools.mcp import MCPTools
 
-AGENT1 = MCPTools(
-    url = "http://127.0.0.1:8000/mcp/agent1/mcp",
+WEATHER_AGENT = MCPTools(
+    url = "http://127.0.0.1:8000/mcp/mcp_weather_agent/mcp",
     transport= "streamable-http",
     timeout_seconds= 1000
 )
