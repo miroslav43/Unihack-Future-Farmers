@@ -8,7 +8,7 @@ import sys
 from typing import Dict, Any
 
 
-BASE_URL = "http://localhost:8001"
+BASE_URL = "http://localhost:8009"
 
 
 async def test_health():

@@ -79,7 +79,7 @@ if __name__ == "__main__":
     uvicorn.run(
         "main:app",
         host="0.0.0.0",
-        port=8001,  # Port unic pentru BackendSera (Backend principal e pe 8000)
+        port=8009,  # Port unic pentru BackendSera (Backend principal e pe 8000)
         reload=True,
         log_level=settings.LOG_LEVEL.lower()
     )

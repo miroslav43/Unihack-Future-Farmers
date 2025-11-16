@@ -215,8 +215,8 @@ async def move_to_position(
     
     Calculează diferența dintre poziția curentă și target și trimite comenzi către motoare.
     
-    - **target_x**: Poziția țintă pe axa X (0-45cm)
-    - **target_y**: Poziția țintă pe axa Y (0-33cm)
+    - **target_x**: Poziția țintă pe axa X (0-45cm) - latura scurtă
+    - **target_y**: Poziția țintă pe axa Y (0-63cm) - latura lungă
     - **current_x**: Poziția curentă pe axa X
     - **current_y**: Poziția curentă pe axa Y
     - **speed**: Viteza de deplasare (cm/s)
@@ -281,6 +281,39 @@ async def move_to_position(
         )
 
 
+@router.post("/release", status_code=status.HTTP_200_OK)
+async def release_motors(
+    request: StopRequest,
+    esp32: ESP32Service = Depends(get_esp32_service)
+) -> Dict[str, Any]:
+    """
+    RELEASE motoarele - relaxează (moale) pentru ajustare manuală
+    
+    Diferă de /stop care oprește dar lasă motoarele "tare" (hold).
+    Release face motoarele "moale" și permite ajustare manuală.
+    
+    - **motors**: Lista de motoare de release sau "all" pentru toate
+    
+    Motoare disponibile: roof_left, roof_right, axis_x, axis_y
+    """
+    try:
+        release_data = request.model_dump()
+        
+        logger.info(f"[API] Release motors request: {release_data}")
+        
+        # Trimite comanda către ESP32
+        response = await esp32.release_motors(release_data)
+        
+        return response
+        
+    except Exception as e:
+        logger.error(f"[API] Eroare la release motoare: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Eroare la comunicarea cu ESP32: {str(e)}"
+        )
+
+
 @router.post("/home", response_model=PositionResponse, status_code=status.HTTP_200_OK)
 async def go_home(
     request: HomeRequest,
@@ -295,8 +328,8 @@ async def go_home(
     """
     try:
         # Poziția HOME = centrul serei
-        HOME_X = 22.5  # cm (45/2)
-        HOME_Y = 16.5  # cm (33/2)
+        HOME_X = 22.5  # cm (45/2) - latura scurtă
+        HOME_Y = 31.5  # cm (63/2) - latura lungă
         
         logger.info(f"[API] Go HOME from ({request.current_x}, {request.current_y})")
         

@@ -1,8 +1,5 @@
-"""Main FastAPI application"""
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-from fastapi.exceptions import RequestValidationError
 from contextlib import asynccontextmanager
 import logging
 
@@ -32,93 +29,55 @@ logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Application lifespan events"""
+    """Handle startup and shutdown events"""
     # Startup
-    logger.info("Starting application...")
-    try:
-        await db_manager.connect()
-        logger.info("Database connected successfully")
-    except Exception as e:
-        logger.error(f"Failed to connect to database: {e}")
-        raise
-    
+    await init_db()
     yield
-    
     # Shutdown
-    logger.info("Shutting down application...")
-    await db_manager.disconnect()
-    logger.info("Database disconnected")
+    await close_db()
 
 
 # Create FastAPI app
 app = FastAPI(
     title=settings.PROJECT_NAME,
-    version=settings.VERSION,
-    lifespan=lifespan,
-    docs_url="/api/docs",
-    redoc_url="/api/redoc",
-    openapi_url="/api/openapi.json"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
-# Configure CORS
+# Configure CORS - COMPLETELY OPEN FOR DEVELOPMENT
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
+    allow_origins=["*"],  # Allow ALL origins
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
-
-# Exception handlers
-@app.exception_handler(RequestValidationError)
-async def validation_exception_handler(request: Request, exc: RequestValidationError):
-    """Handle validation errors"""
-    return JSONResponse(
-        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-        content={
-            "detail": exc.errors(),
-            "body": exc.body
-        }
-    )
+# Include routers
+app.include_router(auth.router, prefix=settings.API_V1_PREFIX)
+app.include_router(farmers.router, prefix=settings.API_V1_PREFIX)
+app.include_router(buyers.router, prefix=settings.API_V1_PREFIX)
+app.include_router(inventory.router, prefix=settings.API_V1_PREFIX)
+app.include_router(contracts.router, prefix=settings.API_V1_PREFIX)
+app.include_router(orders.router, prefix=settings.API_V1_PREFIX)
 
 
-@app.exception_handler(Exception)
-async def general_exception_handler(request: Request, exc: Exception):
-    """Handle general exceptions"""
-    logger.error(f"Unhandled exception: {exc}", exc_info=True)
-    return JSONResponse(
-        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        content={
-            "detail": "Internal server error",
-            "error": str(exc) if settings.DEBUG else "An error occurred"
-        }
-    )
-
-
-# Health check endpoint
-@app.get("/health", tags=["health"])
-async def health_check():
-    """Health check endpoint"""
-    return {
-        "status": "healthy",
-        "service": settings.PROJECT_NAME,
-        "version": settings.VERSION
-    }
-
-
-# Root endpoint
-@app.get("/", tags=["root"])
+@app.get("/")
 async def root():
     """Root endpoint"""
     return {
-        "message": f"Welcome to {settings.PROJECT_NAME}",
-        "version": settings.VERSION,
-        "docs": "/api/docs",
-        "health": "/health"
+        "message": "Future Farmers API",
+        "version": "1.0.0",
+        "database": "PostgreSQL (Neon DB)",
+        "docs": "/docs"
     }
 
 
+@app.get("/health")
+async def health_check():
+    """Health check endpoint"""
+    return {"status": "healthy", "database": "PostgreSQL"}
 # Include routers
 app.include_router(farmer_routes.router, prefix=settings.API_V1_PREFIX)
 app.include_router(document_routes.router, prefix=settings.API_V1_PREFIX)
@@ -137,7 +96,7 @@ if __name__ == "__main__":
     import uvicorn
     uvicorn.run(
         "app.main:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=settings.DEBUG
+        host=settings.HOST,
+        port=settings.PORT,
+        reload=True
     )

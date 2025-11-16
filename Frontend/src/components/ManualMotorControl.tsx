@@ -43,7 +43,7 @@ function SingleMotorControl({
         },
       };
 
-      const response = await fetch("http://localhost:8001/motors/move", {
+      const response = await fetch("http://localhost:8009/motors/move", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(moveData),
@@ -219,7 +219,7 @@ export function ManualMotorControl() {
           motorName="axis_y"
           displayName="Axa Y"
           icon={<ArrowRight className="w-6 h-6 rotate-90 text-green-600" />}
-          maxCm={33}
+          maxCm={63}
         />
 
         <SingleMotorControl
@@ -262,8 +262,8 @@ export function ManualMotorControl() {
             • <strong>Viteză</strong>: 1-30 cm/s
           </li>
           <li>
-            • <strong>Axa X</strong>: Max 45cm | <strong>Axa Y</strong>: Max
-            33cm
+            • <strong>Axa X</strong>: Max 45cm (latura scurtă) |{" "}
+            <strong>Axa Y</strong>: Max 63cm (latura lungă)
           </li>
           <li>
             • <strong>Roof Left</strong>: Max 40cm | <strong>Roof Right</strong>

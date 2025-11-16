@@ -1,24 +1,40 @@
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/contexts/SimpleAuthContext";
 import { cn } from "@/lib/utils";
 import {
   Bot,
   FileChartLine,
   LayoutDashboard,
+  LogOut,
   Menu,
   MessageCircle,
+  Package,
   ScanLine,
   Settings,
+  ShoppingCart,
   Signal,
   Sprout,
   Sun,
+  User,
   Warehouse,
   X,
 } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-const navItems = [
+const farmerNavItems = [
   { path: "/", label: "Dashboard", icon: LayoutDashboard },
+  { path: "/stock", label: "Stock Management", icon: Package },
+  { path: "/contracts", label: "Contracts", icon: FileChartLine },
   { path: "/senzori", label: "Senzori", icon: Signal },
   { path: "/sera", label: "Control Seră", icon: Warehouse },
   { path: "/panouri", label: "Panouri Solare", icon: Sun },
@@ -29,9 +45,53 @@ const navItems = [
   { path: "/setari", label: "Setări", icon: Settings },
 ];
 
+const buyerNavItems = [
+  { path: "/buyer/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { path: "/buyer/browse", label: "Browse Products", icon: Package },
+  { path: "/buyer/orders", label: "My Orders", icon: ShoppingCart },
+  { path: "/setari", label: "Settings", icon: Settings },
+];
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
+  const { user, logout } = useAuth();
+
+  // Select navigation items based on role
+  const navItems = user?.role === "buyer" ? buyerNavItems : farmerNavItems;
+
+  const getInitials = (name?: string, email?: string) => {
+    if (name) {
+      return name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2);
+    }
+    if (email) {
+      return email.substring(0, 2).toUpperCase();
+    }
+    return "U";
+  };
+
+  const getRoleBadge = (userRole?: string) => {
+    if (userRole === "farmer") {
+      return (
+        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary/10 text-primary">
+          Farmer
+        </span>
+      );
+    }
+    if (userRole === "buyer") {
+      return (
+        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-accent/10 text-accent">
+          Buyer
+        </span>
+      );
+    }
+    return null;
+  };
 
   return (
     <div className="min-h-screen gradient-subtle">
@@ -65,6 +125,58 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <div className="h-2 w-2 rounded-full bg-success animate-pulse shadow-glow" />
               <span className="text-sm font-medium text-success">Live</span>
             </div>
+
+            {/* User Menu */}
+            {user && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="relative h-10 w-10 rounded-full"
+                  >
+                    <Avatar className="h-10 w-10">
+                      <AvatarFallback className="bg-primary text-primary-foreground">
+                        {getInitials(user.name, user.email)}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">
+                        {user.name || "User"}
+                      </p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {user.email}
+                      </p>
+                      <div className="pt-1">{getRoleBadge(user.role)}</div>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/setari" className="cursor-pointer">
+                      <User className="mr-2 h-4 w-4" />
+                      <span>Profile</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/setari" className="cursor-pointer">
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>Settings</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={logout}
+                    className="cursor-pointer text-destructive"
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
           </div>
         </div>
       </header>
