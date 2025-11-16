@@ -7,7 +7,7 @@ from typing import Optional
 
 class Settings(BaseSettings):
     # Configurări ESP32
-    ESP32_HOST: str = "esp-multi.local"  # sau IP direct, ex: "192.168.1.100"
+    ESP32_HOST: str = "172.16.32.190"  # IP-ul real al ESP32
     ESP32_PORT: int = 8080
     ESP32_TIMEOUT: int = 10  # secunde
     

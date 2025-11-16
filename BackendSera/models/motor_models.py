@@ -139,19 +139,19 @@ class EmergencyStopResponse(BaseModel):
 
 class PositionRequest(BaseModel):
     """Request pentru poziționare absolută"""
-    target_x: float = Field(..., ge=0, le=45, description="Poziția target pe axa X (0-45cm)")
-    target_y: float = Field(..., ge=0, le=33, description="Poziția target pe axa Y (0-33cm)")
+    target_x: float = Field(..., ge=0, le=45, description="Poziția target pe axa X (0-45cm) - latura scurtă")
+    target_y: float = Field(..., ge=0, le=63, description="Poziția target pe axa Y (0-63cm) - latura lungă")
     current_x: float = Field(..., ge=0, le=45, description="Poziția curentă pe axa X")
-    current_y: float = Field(..., ge=0, le=33, description="Poziția curentă pe axa Y")
+    current_y: float = Field(..., ge=0, le=63, description="Poziția curentă pe axa Y")
     speed: float = Field(8, gt=0, le=30, description="Viteza de deplasare în cm/s")
     
     class Config:
         json_schema_extra = {
             "example": {
                 "target_x": 28.125,
-                "target_y": 27.5,
+                "target_y": 47.5,
                 "current_x": 22.5,
-                "current_y": 16.5,
+                "current_y": 31.5,
                 "speed": 8
             }
         }
@@ -168,5 +168,5 @@ class PositionResponse(BaseModel):
 class HomeRequest(BaseModel):
     """Request pentru întoarcere la centru"""
     current_x: float = Field(..., ge=0, le=45, description="Poziția curentă pe axa X")
-    current_y: float = Field(..., ge=0, le=33, description="Poziția curentă pe axa Y")
+    current_y: float = Field(..., ge=0, le=63, description="Poziția curentă pe axa Y")
     speed: float = Field(8, gt=0, le=30, description="Viteza de deplasare în cm/s")

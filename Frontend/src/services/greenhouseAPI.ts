@@ -2,7 +2,7 @@
  * API Service pentru controlul serei ESP32
  */
 
-const API_BASE_URL = 'http://localhost:8001';
+const API_BASE_URL = 'http://localhost:8009';
 
 export interface Position {
   x: number;
@@ -10,8 +10,8 @@ export interface Position {
 }
 
 export interface PositionRequest {
-  target_x: number;
-  target_y: number;
+  target_x: number; // 0-45cm (latura scurtă)
+  target_y: number; // 0-63cm (latura lungă)
   current_x: number;
   current_y: number;
   speed?: number;

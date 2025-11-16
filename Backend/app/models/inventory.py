@@ -1,62 +1,24 @@
-"""Inventory/Stock data models"""
-from pydantic import BaseModel, Field
-from typing import Optional
-from datetime import datetime
-from enum import Enum
+from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime, Text
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.sql import func
+import uuid
+from app.database import Base
 
 
-class ProductCategory(str, Enum):
-    """Product categories"""
-    VEGETABLES = "vegetables"
-    FRUITS = "fruits"
-    GRAINS = "grains"
-    DAIRY = "dairy"
-    MEAT = "meat"
-    OTHER = "other"
-
-
-class InventoryBase(BaseModel):
-    """Base inventory information"""
-    farmer_id: str
-    product_name: str
-    category: ProductCategory
-    quantity: float
-    unit: str  # kg, tone, litri, bucati
-    price_per_unit: float
-    location: Optional[str] = None  # depozit, camp, etc.
-
-
-class InventoryCreate(InventoryBase):
-    """Inventory creation model"""
-    pass
-
-
-class InventoryUpdate(BaseModel):
-    """Inventory update model"""
-    quantity: Optional[float] = None
-    price_per_unit: Optional[float] = None
-    location: Optional[str] = None
-
-
-class InventoryResponse(InventoryBase):
-    """Inventory response model"""
-    id: str = Field(..., alias="_id")
-    total_value: float
-    created_at: datetime
-    updated_at: datetime
-    last_updated_by: Optional[str] = None
+class InventoryItem(Base):
+    __tablename__ = "inventory"
     
-    class Config:
-        populate_by_name = True
-
-
-class Inventory(InventoryBase):
-    """Internal inventory model"""
-    id: Optional[str] = Field(None, alias="_id")
-    total_value: float = 0.0
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
-    last_updated_by: Optional[str] = None
-    
-    class Config:
-        populate_by_name = True
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
+    farmer_id = Column(UUID(as_uuid=True), nullable=False, index=True)
+    product_name = Column(String, nullable=False)
+    category = Column(String, nullable=False)
+    quantity = Column(Float, nullable=False)
+    unit = Column(String, nullable=False)
+    price_per_unit = Column(Float, nullable=False)
+    is_available_for_sale = Column(Boolean, default=False)
+    location = Column(String, nullable=True)
+    description = Column(Text, nullable=True)
+    min_order_quantity = Column(Float, nullable=True)
+    max_order_quantity = Column(Float, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())

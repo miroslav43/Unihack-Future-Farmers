@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react";
-import { ThermometerSun, Droplets, Sprout, Waves, Sun, CloudRain, TrendingUp, AlertTriangle } from "lucide-react";
+import { ThermometerSun, Droplets, Sprout, Waves, Sun, CloudRain, TrendingUp, AlertTriangle, Package, CheckCircle, XCircle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import KPICard from "@/components/KPICard";
 import heroFarm from "@/assets/hero-farm.jpg";
 import { Link } from "react-router-dom";
+import { orderAPI } from "@/lib/api";
+import { toast } from "sonner";
 
 // Sample real-time data
 const initialSensorData = {
@@ -54,6 +60,75 @@ export default function Dashboard() {
   const [sensorData, setSensorData] = useState(initialSensorData);
   const [historicalData] = useState(generateHistoricalData());
   const [soilData] = useState(generateSoilData());
+  
+  // Orders state
+  const [orders, setOrders] = useState<any[]>([]);
+  const [loadingOrders, setLoadingOrders] = useState(true);
+  const [selectedOrder, setSelectedOrder] = useState<any>(null);
+  const [showAcceptDialog, setShowAcceptDialog] = useState(false);
+  const [showRejectDialog, setShowRejectDialog] = useState(false);
+  const [farmerResponse, setFarmerResponse] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  // Fetch orders
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
+  const fetchOrders = async () => {
+    try {
+      const data = await orderAPI.getAll();
+      const pendingOrders = data.filter((order: any) => order.status === "pending");
+      setOrders(pendingOrders);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    } finally {
+      setLoadingOrders(false);
+    }
+  };
+
+  const handleAccept = async () => {
+    if (!selectedOrder) return;
+    
+    setSubmitting(true);
+    try {
+      const response = await orderAPI.accept(selectedOrder._id, farmerResponse || undefined);
+      toast.success(`Order accepted! Contract created: ${response.contract_id.substring(0, 8)}...`);
+      setShowAcceptDialog(false);
+      setFarmerResponse("");
+      setSelectedOrder(null);
+      fetchOrders(); // Refresh orders
+    } catch (error: any) {
+      console.error("Error accepting order:", error);
+      toast.error(error.response?.data?.detail || "Failed to accept order");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleReject = async () => {
+    if (!selectedOrder) return;
+    
+    if (!farmerResponse.trim()) {
+      toast.error("Please provide a rejection reason");
+      return;
+    }
+    
+    setSubmitting(true);
+    try {
+      await orderAPI.reject(selectedOrder._id, farmerResponse);
+      toast.success("Order rejected");
+      setShowRejectDialog(false);
+      setFarmerResponse("");
+      setSelectedOrder(null);
+      fetchOrders(); // Refresh orders
+    } catch (error: any) {
+      console.error("Error rejecting order:", error);
+      toast.error(error.response?.data?.detail || "Failed to reject order");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   // Simulate real-time updates
   useEffect(() => {
@@ -106,6 +181,91 @@ export default function Dashboard() {
           </Button>
         </div>
       </div>
+
+      {/* Pending Orders Section */}
+      {!loadingOrders && orders.length > 0 && (
+        <Card className="border-primary/50 bg-primary/5">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Package className="h-5 w-5" />
+              Pending Orders ({orders.length})
+            </CardTitle>
+            <CardDescription>New orders waiting for your response</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {orders.map((order) => (
+                <Card key={order._id} className="border-2">
+                  <CardHeader>
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <CardTitle className="text-base">Order from {order.buyer_name}</CardTitle>
+                        <CardDescription>
+                          {new Date(order.created_at).toLocaleString()} • Total: {order.total_amount.toFixed(2)} RON
+                        </CardDescription>
+                      </div>
+                      <Badge variant="outline">Pending</Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Items:</h4>
+                      <div className="space-y-1">
+                        {order.items.map((item: any, idx: number) => (
+                          <div key={idx} className="flex justify-between text-sm">
+                            <span>{item.product_name}</span>
+                            <span className="text-muted-foreground">
+                              {item.quantity} {item.unit} × {item.price_per_unit} RON = {item.total.toFixed(2)} RON
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    {order.buyer_message && (
+                      <div>
+                        <h4 className="font-medium mb-1">Message:</h4>
+                        <p className="text-sm text-muted-foreground">{order.buyer_message}</p>
+                      </div>
+                    )}
+                    
+                    {order.expected_delivery_date && (
+                      <div>
+                        <h4 className="font-medium mb-1">Expected Delivery:</h4>
+                        <p className="text-sm text-muted-foreground">{order.expected_delivery_date}</p>
+                      </div>
+                    )}
+                    
+                    <div className="flex gap-2 pt-2">
+                      <Button
+                        onClick={() => {
+                          setSelectedOrder(order);
+                          setShowAcceptDialog(true);
+                        }}
+                        className="flex-1"
+                      >
+                        <CheckCircle className="mr-2 h-4 w-4" />
+                        Accept Order
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        onClick={() => {
+                          setSelectedOrder(order);
+                          setShowRejectDialog(true);
+                        }}
+                        className="flex-1"
+                      >
+                        <XCircle className="mr-2 h-4 w-4" />
+                        Reject Order
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* KPI Grid */}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -282,6 +442,75 @@ export default function Dashboard() {
           </Button>
         </CardContent>
       </Card>
+
+      {/* Accept Order Dialog */}
+      <Dialog open={showAcceptDialog} onOpenChange={setShowAcceptDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Accept Order</DialogTitle>
+            <DialogDescription>
+              Accepting this order will create a contract that requires both parties to sign.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="accept-response">Response Message (Optional)</Label>
+              <Textarea
+                id="accept-response"
+                placeholder="Thank you for your order! We'll process it promptly..."
+                value={farmerResponse}
+                onChange={(e) => setFarmerResponse(e.target.value)}
+                rows={3}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowAcceptDialog(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleAccept} disabled={submitting}>
+              {submitting ? "Accepting..." : "Accept & Create Contract"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Reject Order Dialog */}
+      <Dialog open={showRejectDialog} onOpenChange={setShowRejectDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Reject Order</DialogTitle>
+            <DialogDescription>
+              Please provide a reason for rejecting this order.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="reject-reason">Rejection Reason *</Label>
+              <Textarea
+                id="reject-reason"
+                placeholder="Unfortunately, we cannot fulfill this order because..."
+                value={farmerResponse}
+                onChange={(e) => setFarmerResponse(e.target.value)}
+                rows={3}
+                required
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowRejectDialog(false)}>
+              Cancel
+            </Button>
+            <Button 
+              variant="destructive" 
+              onClick={handleReject} 
+              disabled={submitting || !farmerResponse.trim()}
+            >
+              {submitting ? "Rejecting..." : "Reject Order"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

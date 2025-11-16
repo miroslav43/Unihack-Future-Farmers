@@ -98,7 +98,15 @@ class ESP32Service:
         # Convertește toate valorile cm și speed la întregi (ESP32 nu acceptă float-uri)
         cleaned_data = {}
         for motor, cmd in move_data.items():
-            cm_value = int(round(cmd["cm"]))
+            cm_value = cmd["cm"]
+            
+            # FIX: roof_left necesită +0.5cm extra pentru sincronizare
+            if motor == "roof_left":
+                cm_value = cm_value + 0.5
+                logger.info(f"[ESP32] roof_left: offset aplicat {cmd['cm']} → {cm_value} cm")
+            
+            cm_value = int(round(cm_value))
+            
             # Validare: nu trimite 0, minim 1cm
             if cm_value < 1:
                 logger.warning(f"[ESP32] Skip {motor}: cm prea mic ({cm_value})")
@@ -107,10 +115,18 @@ class ESP32Service:
             # Aplică maparea pentru motorul fizic
             physical_motor = MOTOR_MAPPING.get(motor, motor)
             
+            # FIX: roof_left are direcția inversată fizic
+            # dir: 1 = deschide, 0 = închide (logic)
+            # Pentru roof_left: 1 logic → 0 fizic, 0 logic → 1 fizic
+            direction = cmd["dir"]
+            if motor == "roof_left":
+                direction = 1 if cmd["dir"] == 0 else 0
+                logger.info(f"[ESP32] roof_left: inversare direcție {cmd['dir']} → {direction}")
+            
             cleaned_data[physical_motor] = {
                 "cm": cm_value,
                 "speed": int(cmd["speed"]),
-                "dir": cmd["dir"]
+                "dir": direction
             }
         
         if not cleaned_data:
@@ -123,7 +139,9 @@ class ESP32Service:
     
     async def stop_motors(self, stop_data: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Oprește motoarele specificate
+        Oprește motoarele specificate (dar le lasă "tare" - HOLD)
+        
+        IMPORTANT: NU aplicăm mapare pentru stop - trimitem direct numele motorului fizic
         
         Args:
             stop_data: Date de stop în format JSON
@@ -131,7 +149,23 @@ class ESP32Service:
         Returns:
             Response de la ESP32
         """
+        # NU aplicăm MOTOR_MAPPING pentru stop - trimitem direct
         return await self._make_request("POST", "/api/stop", stop_data)
+    
+    async def release_motors(self, release_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Relaxează motoarele specificate ("moale" - permite ajustare manuală)
+        
+        IMPORTANT: NU aplicăm mapare pentru release - trimitem direct numele motorului fizic
+        
+        Args:
+            release_data: Date de release în format JSON
+            
+        Returns:
+            Response de la ESP32
+        """
+        # NU aplicăm MOTOR_MAPPING pentru release - trimitem direct
+        return await self._make_request("POST", "/api/release", release_data)
     
     async def emergency_stop(self) -> Dict[str, Any]:
         """

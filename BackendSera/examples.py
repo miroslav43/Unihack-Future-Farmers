@@ -9,7 +9,7 @@ from typing import Optional
 class GreenhouseController:
     """Clasă helper pentru controlul serei"""
     
-    def __init__(self, base_url: str = "http://localhost:8001"):
+    def __init__(self, base_url: str = "http://localhost:8009"):
         self.base_url = base_url
     
     async def move_motor(
