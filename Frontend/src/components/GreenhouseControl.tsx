@@ -16,7 +16,7 @@ import {
   Square,
   Unlock,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { greenhouseAPI, Position } from "../services/greenhouseAPI";
 import { ManualMotorControl } from "./ManualMotorControl";
 
@@ -72,6 +72,10 @@ export function GreenhouseControl() {
   const [selectedPosition, setSelectedPosition] = useState<number | null>(null);
   const [showCalibration, setShowCalibration] = useState(false);
   const [roofMoving, setRoofMoving] = useState(false);
+  const [autoTourRunning, setAutoTourRunning] = useState(false);
+
+  // useRef pentru verificare INSTANT a AUTO TOUR (nu async ca state)
+  const autoTourRunningRef = useRef(false);
 
   // Check conexiune la montare
   useEffect(() => {
@@ -214,6 +218,10 @@ export function GreenhouseControl() {
 
   const emergencyStop = async () => {
     try {
+      // Oprește AUTO TOUR dacă rulează
+      setAutoTourRunning(false);
+      autoTourRunningRef.current = false;
+
       await greenhouseAPI.emergencyStop();
       setIsMoving(false);
       setRoofMoving(false);
@@ -252,6 +260,208 @@ export function GreenhouseControl() {
     } catch (err) {
       setError("Eroare la emergency release all");
       console.error(err);
+    }
+  };
+
+  // AUTO TOUR: Parcurge toate plantele în ordine ZIG-ZAG
+  const startAutoTour = async () => {
+    if (isMoving) return;
+
+    const confirmed = window.confirm(
+      "🤖 AUTO TOUR ZIG-ZAG\n\n" +
+        "Sistemul va parcurge automat toate cele 12 plante:\n" +
+        "• Rând 1: 🌱1 → 🌱2 → 🌱3 (stânga→dreapta)\n" +
+        "• Rând 2: 🌱6 → 🌱5 → 🌱4 (dreapta→stânga)\n" +
+        "• Rând 3: 🌱7 → 🌱8 → 🌱9 (stânga→dreapta)\n" +
+        "• Rând 4: 🌱12 → 🌱11 → 🌱10 (dreapta→stânga)\n" +
+        "• Delay 1 sec la fiecare plantă\n" +
+        "• Delay 1 sec între rânduri\n" +
+        "• La final: întoarcere la HOME (0,0)\n\n" +
+        "Continui?"
+    );
+
+    if (!confirmed) return;
+
+    setIsMoving(true);
+    setAutoTourRunning(true);
+    autoTourRunningRef.current = true; // Setează flag-ul INSTANT
+    setError(null);
+
+    try {
+      // Ordinea ZIG-ZAG: 1,2,3 -> 6,5,4 -> 7,8,9 -> 12,11,10
+      const zigzagOrder = [
+        0,
+        1,
+        2, // Rând 1: index 0,1,2 (plante 1,2,3)
+        5,
+        4,
+        3, // Rând 2: index 5,4,3 (plante 6,5,4) - INVERS
+        6,
+        7,
+        8, // Rând 3: index 6,7,8 (plante 7,8,9)
+        11,
+        10,
+        9, // Rând 4: index 11,10,9 (plante 12,11,10) - INVERS
+      ];
+
+      for (let step = 0; step < zigzagOrder.length; step++) {
+        // Verifică dacă EMERGENCY STOP a fost apăsat
+        if (!autoTourRunningRef.current) {
+          console.log("[AUTO TOUR] Oprit prin EMERGENCY STOP");
+          break;
+        }
+
+        const i = zigzagOrder[step];
+        const relativePos = PLANT_POSITIONS_RELATIVE[i];
+        const targetAbsolute = {
+          x: homePosition.x + relativePos.x,
+          y: homePosition.y + relativePos.y,
+        };
+
+        // Calculează distanța și timpul necesar pentru mișcare
+        const deltaX = Math.abs(targetAbsolute.x - currentPosition.x);
+        const deltaY = Math.abs(targetAbsolute.y - currentPosition.y);
+        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        const speed = 8; // cm/s
+
+        // Timp realist: include accelerare/decelerare + overhead motor
+        // Formula: (distanță / viteză) * 2.0 pentru overhead FOARTE realist
+        const baseTravelTime = (distance / speed) * 1000; // milisecunde
+        const realisticTravelTime = baseTravelTime * 2.0; // ×2 pentru siguranță (accelerare + decelerare + overhead)
+
+        console.log(
+          `[AUTO TOUR] Planta ${i + 1}: (${relativePos.x}, ${
+            relativePos.y
+          }) - Dist: ${distance.toFixed(1)}cm, Timp estimat: ${(
+            realisticTravelTime / 1000
+          ).toFixed(1)}s`
+        );
+
+        const response = await greenhouseAPI.moveToPosition({
+          target_x: targetAbsolute.x,
+          target_y: targetAbsolute.y,
+          current_x: currentPosition.x,
+          current_y: currentPosition.y,
+          speed: speed,
+        });
+
+        // Actualizează poziția curentă
+        const newPosition = {
+          x: response.new_position.x,
+          y: response.new_position.y,
+        };
+        setCurrentPosition(newPosition);
+        setSelectedPosition(i);
+
+        localStorage.setItem("greenhousePosition", JSON.stringify(newPosition));
+
+        // Verifică din nou dacă EMERGENCY STOP a fost apăsat
+        if (!autoTourRunningRef.current) {
+          console.log("[AUTO TOUR] Oprit prin EMERGENCY STOP");
+          break;
+        }
+
+        // AȘTEAPTĂ ca motorul să ajungă la destinație
+        // Buffer de 3 secunde pentru siguranță + timp realist de călătorie
+        const waitTime = Math.max(realisticTravelTime + 3000, 3000); // Minimum 3 secunde
+        console.log(
+          `[AUTO TOUR] ⏱️ Aștept ${(waitTime / 1000).toFixed(
+            1
+          )}s ca motorul să execute comanda...`
+        );
+        await new Promise((resolve) => setTimeout(resolve, waitTime));
+
+        // Verifică din nou după ce motorul a ajuns
+        if (!autoTourRunningRef.current) {
+          console.log("[AUTO TOUR] Oprit prin EMERGENCY STOP");
+          break;
+        }
+
+        // La finalul fiecărui rând (după 3 plante), PAUZĂ 2 secunde între rânduri
+        if ((step + 1) % 3 === 0 && step < zigzagOrder.length - 1) {
+          console.log(
+            `[AUTO TOUR] 🔄 Schimbare rând - Pauză 2 sec (după planta ${i + 1})`
+          );
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+
+          // Verifică din nou după pauză
+          if (!autoTourRunningRef.current) {
+            console.log("[AUTO TOUR] Oprit prin EMERGENCY STOP");
+            break;
+          }
+        }
+
+        // Actualizează currentPosition pentru următoarea iterație
+        currentPosition.x = newPosition.x;
+        currentPosition.y = newPosition.y;
+      }
+
+      // Dacă nu a fost oprit prin EMERGENCY STOP, merge la HOME
+      if (autoTourRunningRef.current) {
+        // Așteaptă 2 secunde înainte de a merge la HOME
+        console.log(
+          "[AUTO TOUR] 🏠 Pregătire întoarcere la HOME - Pauză 2 sec..."
+        );
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+
+        if (autoTourRunningRef.current) {
+          // Calculează distanța până la HOME
+          const deltaX = Math.abs(homePosition.x - currentPosition.x);
+          const deltaY = Math.abs(homePosition.y - currentPosition.y);
+          const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+          const speed = 8; // cm/s
+
+          // Timp realist cu overhead
+          const baseTravelTime = (distance / speed) * 1000;
+          const realisticTravelTime = baseTravelTime * 2.0; // ×2 pentru siguranță
+
+          console.log(
+            `[AUTO TOUR] Întoarcere la HOME (0,0) - Dist: ${distance.toFixed(
+              1
+            )}cm, Timp estimat: ${(realisticTravelTime / 1000).toFixed(1)}s`
+          );
+
+          const homeResponse = await greenhouseAPI.moveToPosition({
+            target_x: homePosition.x,
+            target_y: homePosition.y,
+            current_x: currentPosition.x,
+            current_y: currentPosition.y,
+            speed: speed,
+          });
+
+          setCurrentPosition({
+            x: homeResponse.new_position.x,
+            y: homeResponse.new_position.y,
+          });
+          setSelectedPosition(null);
+
+          localStorage.setItem(
+            "greenhousePosition",
+            JSON.stringify(homeResponse.new_position)
+          );
+
+          // Așteaptă ca motorul să ajungă la HOME
+          const waitTime = Math.max(realisticTravelTime + 3000, 3000); // Buffer 3 sec
+          console.log(
+            `[AUTO TOUR] ⏱️ Aștept ${(waitTime / 1000).toFixed(
+              1
+            )}s ca motorul să ajungă la HOME...`
+          );
+          await new Promise((resolve) => setTimeout(resolve, waitTime));
+
+          alert(
+            "✅ AUTO TOUR completat!\n\nToate plantele au fost vizitate și sistemul s-a întors la HOME."
+          );
+        }
+      } else {
+        alert("⚠️ AUTO TOUR oprit prin EMERGENCY STOP!");
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Eroare la AUTO TOUR");
+    } finally {
+      setIsMoving(false);
+      setAutoTourRunning(false);
+      autoTourRunningRef.current = false;
     }
   };
 
@@ -772,40 +982,69 @@ export function GreenhouseControl() {
             </div>
 
             {/* Control Buttons */}
-            <div className="flex gap-3">
-              <button
-                onClick={goHome}
-                disabled={isMoving || !isConnected}
-                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg 
-                     flex items-center justify-center gap-2 transition-colors shadow-md
-                     disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <Home className="w-5 h-5" />
-                GO HOME ({homePosition.x.toFixed(1)},{" "}
-                {homePosition.y.toFixed(1)})
-              </button>
+            <div className="flex flex-col gap-3">
+              {/* Rând 1: GO HOME + AUTO TOUR */}
+              <div className="flex gap-3">
+                <button
+                  onClick={goHome}
+                  disabled={isMoving || !isConnected}
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg 
+                       flex items-center justify-center gap-2 transition-colors shadow-md
+                       disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Home className="w-5 h-5" />
+                  GO HOME ({homePosition.x.toFixed(1)},{" "}
+                  {homePosition.y.toFixed(1)})
+                </button>
 
-              <button
-                onClick={emergencyStop}
-                disabled={!isConnected}
-                className="bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-6 rounded-lg 
-                     flex items-center justify-center gap-2 transition-colors shadow-md
-                     disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <AlertTriangle className="w-5 h-5" />
-                STOP
-              </button>
+                <button
+                  onClick={startAutoTour}
+                  disabled={isMoving || !isConnected}
+                  className="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 
+                       text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 
+                       transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+                    />
+                  </svg>
+                  🤖 AUTO TOUR (12 plante)
+                </button>
+              </div>
 
-              <button
-                onClick={emergencyReleaseAll}
-                disabled={!isConnected}
-                className="bg-red-800 hover:bg-red-900 text-white font-bold py-3 px-6 rounded-lg 
-                     flex items-center justify-center gap-2 transition-colors shadow-lg border-4 border-red-950
-                     disabled:opacity-50 disabled:cursor-not-allowed animate-pulse"
-              >
-                <Unlock className="w-6 h-6" />
-                🚨 EMERGENCY RELEASE ALL
-              </button>
+              {/* Rând 2: STOP + EMERGENCY RELEASE */}
+              <div className="flex gap-3">
+                <button
+                  onClick={emergencyStop}
+                  disabled={!isConnected}
+                  className="flex-1 bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-6 rounded-lg 
+                       flex items-center justify-center gap-2 transition-colors shadow-md
+                       disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <AlertTriangle className="w-5 h-5" />
+                  STOP
+                </button>
+
+                <button
+                  onClick={emergencyReleaseAll}
+                  disabled={!isConnected}
+                  className="flex-1 bg-red-800 hover:bg-red-900 text-white font-bold py-3 px-6 rounded-lg 
+                       flex items-center justify-center gap-2 transition-colors shadow-lg border-4 border-red-950
+                       disabled:opacity-50 disabled:cursor-not-allowed animate-pulse"
+                >
+                  <Unlock className="w-6 h-6" />
+                  🚨 EMERGENCY RELEASE ALL
+                </button>
+              </div>
             </div>
           </div>
 

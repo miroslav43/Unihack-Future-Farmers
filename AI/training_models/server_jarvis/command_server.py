@@ -1,4 +1,8 @@
 from flask import Flask, request, jsonify
+import requests
+
+# Configuration
+BACKEND_SERA_URL = "http://localhost:8009"
 
 app = Flask(__name__)
 
@@ -23,11 +27,39 @@ def receive_command():
     # Process commands
     if command_code == 1:
         print("🔓 OPENING THE ROOF...")
-        # Your roof opening code here
+        try:
+            response = requests.post(
+                f"{BACKEND_SERA_URL}/motors/move",
+                json={
+                    "roof_left": {"cm": 2, "speed": 1, "dir": 1},
+                    "roof_right": {"cm": 2, "speed": 1, "dir": 1}
+                },
+                timeout=5
+            )
+            if response.ok:
+                print("✅ Roof opened successfully")
+            else:
+                print(f"⚠️ Error opening roof: {response.status_code}")
+        except Exception as e:
+            print(f"❌ Failed to open roof: {e}")
         
     elif command_code == 2:
         print("🔒 CLOSING THE ROOF...")
-        # Your roof closing code here
+        try:
+            response = requests.post(
+                f"{BACKEND_SERA_URL}/motors/move",
+                json={
+                    "roof_left": {"cm": 2, "speed": 1, "dir": 0},
+                    "roof_right": {"cm": 2, "speed": 1, "dir": 0}
+                },
+                timeout=5
+            )
+            if response.ok:
+                print("✅ Roof closed successfully")
+            else:
+                print(f"⚠️ Error closing roof: {response.status_code}")
+        except Exception as e:
+            print(f"❌ Failed to close roof: {e}")
         
     elif command_code == 3:
         print("💧 WATERING ALL PLANTS...")
@@ -60,7 +92,7 @@ def receive_command():
 
 if __name__ == '__main__':
     print("🚀 Command Server is running and waiting for commands...")
-    print("Listening on http://localhost:5000/command")
+    print("Listening on http://localhost:6000/command")
     print("\nSupported commands:")
     print("  Code 1: Open roof")
     print("  Code 2: Close roof")
@@ -71,4 +103,4 @@ if __name__ == '__main__':
     print("\nPress Ctrl+C to stop\n")
     
     # Run server (always listening)
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(host='0.0.0.0', port=6000, debug=False)

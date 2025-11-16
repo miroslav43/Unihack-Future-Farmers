@@ -139,10 +139,10 @@ class EmergencyStopResponse(BaseModel):
 
 class PositionRequest(BaseModel):
     """Request pentru poziționare absolută"""
-    target_x: float = Field(..., ge=0, le=45, description="Poziția target pe axa X (0-45cm) - latura scurtă")
-    target_y: float = Field(..., ge=0, le=63, description="Poziția target pe axa Y (0-63cm) - latura lungă")
-    current_x: float = Field(..., ge=0, le=45, description="Poziția curentă pe axa X")
-    current_y: float = Field(..., ge=0, le=63, description="Poziția curentă pe axa Y")
+    target_x: float = Field(..., description="Poziția target pe axa X (orice valoare)")
+    target_y: float = Field(..., description="Poziția target pe axa Y (orice valoare)")
+    current_x: float = Field(..., description="Poziția curentă pe axa X")
+    current_y: float = Field(..., description="Poziția curentă pe axa Y")
     speed: float = Field(8, gt=0, le=30, description="Viteza de deplasare în cm/s")
     
     class Config:
@@ -167,6 +167,6 @@ class PositionResponse(BaseModel):
 
 class HomeRequest(BaseModel):
     """Request pentru întoarcere la centru"""
-    current_x: float = Field(..., ge=0, le=45, description="Poziția curentă pe axa X")
-    current_y: float = Field(..., ge=0, le=63, description="Poziția curentă pe axa Y")
+    current_x: float = Field(..., description="Poziția curentă pe axa X")
+    current_y: float = Field(..., description="Poziția curentă pe axa Y")
     speed: float = Field(8, gt=0, le=30, description="Viteza de deplasare în cm/s")

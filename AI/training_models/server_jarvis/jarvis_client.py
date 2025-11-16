@@ -11,8 +11,18 @@ import re
 # Get free API key from: https://console.picovoice.ai/
 ACCESS_KEY = os.getenv("JARVIS_ACCESS_KEY")
 
+# Check if access key is set
+if not ACCESS_KEY:
+    print("⚠️  WARNING: JARVIS_ACCESS_KEY environment variable not set!")
+    print("To set it, run:")
+    print("  export JARVIS_ACCESS_KEY='your_key_here'  # macOS/Linux")
+    print("  Or set it in your ~/.zshrc or ~/.bashrc")
+    print("\nGet your free key from: https://console.picovoice.ai/")
+    print("\nExiting...")
+    exit(1)
+
 # Server configuration
-SERVER_URL = "http://localhost:5000/command"  # Change if server is on different machine
+SERVER_URL = "http://localhost:6000/command"  # Change if server is on different machine
 
 # Initialize Whisper model once (reuse for efficiency)
 print("Loading Whisper model...")
@@ -170,26 +180,40 @@ print("🎧 Listening for 'Jarvis'...\n")
 
 try:
     while True:
-        # Listen for wake word
-        pcm = audio_stream.read(porcupine.frame_length)
-        pcm = struct.unpack_from("h" * porcupine.frame_length, pcm)
-        
-        keyword_index = porcupine.process(pcm)
-        
-        if keyword_index >= 0:
-            print("✅ Wake word detected! Listening for command...\n")
+        try:
+            # Listen for wake word
+            pcm = audio_stream.read(porcupine.frame_length, exception_on_overflow=False)
+            pcm = struct.unpack_from("h" * porcupine.frame_length, pcm)
             
-            # Record command
-            audio_data = record_command(duration=5)
+            keyword_index = porcupine.process(pcm)
             
-            # Transcribe
-            command = transcribe_command(audio_data)
-            print(f"💬 You said: {command}\n")
-            
-            # Send command to server
-            send_command(command)
-            
-            print("\n🎧 Listening for 'Jarvis' again...\n")
+            if keyword_index >= 0:
+                print("✅ Wake word detected! Listening for command...\n")
+                
+                # Clear any remaining buffer
+                try:
+                    audio_stream.read(audio_stream.get_read_available(), exception_on_overflow=False)
+                except:
+                    pass
+                
+                # Record command
+                audio_data = record_command(duration=5)
+                
+                # Transcribe
+                command = transcribe_command(audio_data)
+                print(f"💬 You said: {command}\n")
+                
+                # Send command to server
+                send_command(command)
+                
+                print("\n🎧 Listening for 'Jarvis' again...\n")
+                
+        except OSError as e:
+            # Handle input overflow - just skip this frame
+            if "Input overflowed" in str(e):
+                continue
+            else:
+                raise
             
 except KeyboardInterrupt:
     print("\n🛑 Stopping...")
