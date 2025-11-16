@@ -74,6 +74,33 @@ def parse_command(command_text):
     """Parse command and return code and additional data"""
     text_lower = command_text.lower()
     
+    # Check for "map home" or "set home" (code 9)
+    if ("map" in text_lower or "set" in text_lower) and "home" in text_lower:
+        return {
+            "code": 9,
+            "action": "MAP HOME POSITION",
+            "text": command_text
+        }
+    
+    # Check for "full tour" or "auto tour" (code 8)
+    if ("full" in text_lower or "auto" in text_lower) and "tour" in text_lower:
+        return {
+            "code": 8,
+            "action": "START FULL AUTO TOUR",
+            "text": command_text
+        }
+    
+    # Check for "go to plant [number]" (code 7)
+    if "go" in text_lower and "plant" in text_lower:
+        plant_num = extract_plant_number(text_lower)
+        if plant_num:
+            return {
+                "code": 7,
+                "action": f"GO TO PLANT {plant_num}",
+                "plant_number": plant_num,
+                "text": command_text
+            }
+    
     # Check for "sensors greenhouse" (code 6)
     if "sensor" in text_lower and "greenhouse" in text_lower:
         return {
@@ -141,13 +168,22 @@ def send_command(command_text):
         print("❌ No recognized command")
         return
     
+    # Determine timeout based on command type
+    # Code 7 (go to plant) needs more time: movement + 5s wait + return = ~30s
+    # Code 8 (full tour) needs even more time: ~90s
+    timeout = 5  # Default timeout
+    if parsed['code'] == 7:
+        timeout = 60  # Go to plant: 60 seconds
+    elif parsed['code'] == 8:
+        timeout = 120  # Full tour: 120 seconds
+    
     # Send to server
     try:
         print(f"📤 Sending command: {parsed['action']} (code: {parsed['code']})")
         response = requests.post(
             SERVER_URL,
             json=parsed,
-            timeout=5
+            timeout=timeout
         )
         
         if response.status_code == 200:
