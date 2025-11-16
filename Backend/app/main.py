@@ -1,9 +1,30 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
-from app.config import settings
-from app.database import init_db, close_db
-from app.routers import auth, farmers, buyers, inventory, contracts, orders
+import logging
+
+from .config.settings import settings
+from .config.database import db_manager
+from .routes import (
+    farmer_routes, 
+    document_routes, 
+    assessment_routes, 
+    application_routes,
+    order_routes,
+    inventory_routes,
+    crop_routes,
+    task_routes,
+    conversational_routes,
+    ai_chat_routes,
+    harvest_routes
+)
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO if not settings.DEBUG else logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
@@ -57,6 +78,18 @@ async def root():
 async def health_check():
     """Health check endpoint"""
     return {"status": "healthy", "database": "PostgreSQL"}
+# Include routers
+app.include_router(farmer_routes.router, prefix=settings.API_V1_PREFIX)
+app.include_router(document_routes.router, prefix=settings.API_V1_PREFIX)
+app.include_router(assessment_routes.router, prefix=settings.API_V1_PREFIX)
+app.include_router(application_routes.router, prefix=settings.API_V1_PREFIX)
+app.include_router(order_routes.router, prefix=settings.API_V1_PREFIX)
+app.include_router(inventory_routes.router, prefix=settings.API_V1_PREFIX)
+app.include_router(crop_routes.router, prefix=settings.API_V1_PREFIX)
+app.include_router(task_routes.router, prefix=settings.API_V1_PREFIX)
+app.include_router(conversational_routes.router, prefix=settings.API_V1_PREFIX)
+app.include_router(ai_chat_routes.router, prefix=settings.API_V1_PREFIX)
+app.include_router(harvest_routes.router, prefix=settings.API_V1_PREFIX)
 
 
 if __name__ == "__main__":

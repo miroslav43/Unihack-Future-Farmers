@@ -262,8 +262,8 @@ export function ManualMotorControl() {
             • <strong>Viteză</strong>: 1-30 cm/s
           </li>
           <li>
-            • <strong>Axa X</strong>: Max 45cm (latura scurtă) | <strong>Axa Y</strong>: Max
-            63cm (latura lungă)
+            • <strong>Axa X</strong>: Max 45cm (latura scurtă) |{" "}
+            <strong>Axa Y</strong>: Max 63cm (latura lungă)
           </li>
           <li>
             • <strong>Roof Left</strong>: Max 40cm | <strong>Roof Right</strong>

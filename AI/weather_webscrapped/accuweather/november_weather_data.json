@@ -1,0 +1,264 @@
+{
+    "month": "November",
+    "year": 2025,
+    "scraped_date": "2025-11-15 20:47:21",
+    "source": "Local HTML file",
+    "source_file": "november-weather.html",
+    "location": "Timisoara, Romania",
+    "temperature_unit": "Celsius",
+    "total_days": 42,
+    "data": [
+        {
+            "Day of the month": "26",
+            "Maximum predicted weather": "14°",
+            "Minimum predicted weather": "10°",
+            "General weather description": "-"
+        },
+        {
+            "Day of the month": "27",
+            "Maximum predicted weather": "15°",
+            "Minimum predicted weather": "6°",
+            "General weather description": "-"
+        },
+        {
+            "Day of the month": "28",
+            "Maximum predicted weather": "16°",
+            "Minimum predicted weather": "6°",
+            "General weather description": "-"
+        },
+        {
+            "Day of the month": "29",
+            "Maximum predicted weather": "19°",
+            "Minimum predicted weather": "3°",
+            "General weather description": "-"
+        },
+        {
+            "Day of the month": "30",
+            "Maximum predicted weather": "22°",
+            "Minimum predicted weather": "4°",
+            "General weather description": "-"
+        },
+        {
+            "Day of the month": "31",
+            "Maximum predicted weather": "21°",
+            "Minimum predicted weather": "11°",
+            "General weather description": "-"
+        },
+        {
+            "Day of the month": "1",
+            "Maximum predicted weather": "24°",
+            "Minimum predicted weather": "9°",
+            "General weather description": "-"
+        },
+        {
+            "Day of the month": "2",
+            "Maximum predicted weather": "23°",
+            "Minimum predicted weather": "7°",
+            "General weather description": "-"
+        },
+        {
+            "Day of the month": "3",
+            "Maximum predicted weather": "21°",
+            "Minimum predicted weather": "8°",
+            "General weather description": "-"
+        },
+        {
+            "Day of the month": "4",
+            "Maximum predicted weather": "15°",
+            "Minimum predicted weather": "4°",
+            "General weather description": "-"
+        },
+        {
+            "Day of the month": "5",
+            "Maximum predicted weather": "16°",
+            "Minimum predicted weather": "1°",
+            "General weather description": "-"
+        },
+        {
+            "Day of the month": "6",
+            "Maximum predicted weather": "15°",
+            "Minimum predicted weather": "2°",
+            "General weather description": "-"
+        },
+        {
+            "Day of the month": "7",
+            "Maximum predicted weather": "17°",
+            "Minimum predicted weather": "3°",
+            "General weather description": "-"
+        },
+        {
+            "Day of the month": "8",
+            "Maximum predicted weather": "11°",
+            "Minimum predicted weather": "9°",
+            "General weather description": "-"
+        },
+        {
+            "Day of the month": "9",
+            "Maximum predicted weather": "11°",
+            "Minimum predicted weather": "9°",
+            "General weather description": "-"
+        },
+        {
+            "Day of the month": "10",
+            "Maximum predicted weather": "11°",
+            "Minimum predicted weather": "6°",
+            "General weather description": "-"
+        },
+        {
+            "Day of the month": "11",
+            "Maximum predicted weather": "7°",
+            "Minimum predicted weather": "4°",
+            "General weather description": "-"
+        },
+        {
+            "Day of the month": "12",
+            "Maximum predicted weather": "10°",
+            "Minimum predicted weather": "2°",
+            "General weather description": "-"
+        },
+        {
+            "Day of the month": "13",
+            "Maximum predicted weather": "7°",
+            "Minimum predicted weather": "1°",
+            "General weather description": "-"
+        },
+        {
+            "Day of the month": "14",
+            "Maximum predicted weather": "17°",
+            "Minimum predicted weather": "1°",
+            "General weather description": "-"
+        },
+        {
+            "Day of the month": "15",
+            "Maximum predicted weather": "16°",
+            "Minimum predicted weather": "6°",
+            "General weather description": "Soare cu nori"
+        },
+        {
+            "Day of the month": "16",
+            "Maximum predicted weather": "16°",
+            "Minimum predicted weather": "8°",
+            "General weather description": "Nori şi soare"
+        },
+        {
+            "Day of the month": "17",
+            "Maximum predicted weather": "19°",
+            "Minimum predicted weather": "6°",
+            "General weather description": "O aversă"
+        },
+        {
+            "Day of the month": "18",
+            "Maximum predicted weather": "8°",
+            "Minimum predicted weather": "2°",
+            "General weather description": "Mult mai răcoros"
+        },
+        {
+            "Day of the month": "19",
+            "Maximum predicted weather": "7°",
+            "Minimum predicted weather": "2°",
+            "General weather description": "Noros"
+        },
+        {
+            "Day of the month": "20",
+            "Maximum predicted weather": "13°",
+            "Minimum predicted weather": "5°",
+            "General weather description": "Mai cald"
+        },
+        {
+            "Day of the month": "21",
+            "Maximum predicted weather": "14°",
+            "Minimum predicted weather": "7°",
+            "General weather description": "Înnorare accentuată"
+        },
+        {
+            "Day of the month": "22",
+            "Maximum predicted weather": "9°",
+            "Minimum predicted weather": "4°",
+            "General weather description": "Ploaie scurtă"
+        },
+        {
+            "Day of the month": "23",
+            "Maximum predicted weather": "8°",
+            "Minimum predicted weather": "2°",
+            "General weather description": "Perioade de ploaie"
+        },
+        {
+            "Day of the month": "24",
+            "Maximum predicted weather": "10°",
+            "Minimum predicted weather": "4°",
+            "General weather description": "Înnorare accentuată"
+        },
+        {
+            "Day of the month": "25",
+            "Maximum predicted weather": "8°",
+            "Minimum predicted weather": "3°",
+            "General weather description": "Predominant noros"
+        },
+        {
+            "Day of the month": "26",
+            "Maximum predicted weather": "9°",
+            "Minimum predicted weather": "1°",
+            "General weather description": "Ploaie scurtă"
+        },
+        {
+            "Day of the month": "27",
+            "Maximum predicted weather": "9°",
+            "Minimum predicted weather": "3°",
+            "General weather description": "Ploaie scurtă"
+        },
+        {
+            "Day of the month": "28",
+            "Maximum predicted weather": "11°",
+            "Minimum predicted weather": "0°",
+            "General weather description": "Nori şi soare"
+        },
+        {
+            "Day of the month": "29",
+            "Maximum predicted weather": "10°",
+            "Minimum predicted weather": "1°",
+            "General weather description": "Noros"
+        },
+        {
+            "Day of the month": "30",
+            "Maximum predicted weather": "9°",
+            "Minimum predicted weather": "1°",
+            "General weather description": "Predominant noros"
+        },
+        {
+            "Day of the month": "1",
+            "Maximum predicted weather": "9°",
+            "Minimum predicted weather": "3°",
+            "General weather description": "Noros"
+        },
+        {
+            "Day of the month": "2",
+            "Maximum predicted weather": "9°",
+            "Minimum predicted weather": "4°",
+            "General weather description": "Perioade de ploaie"
+        },
+        {
+            "Day of the month": "3",
+            "Maximum predicted weather": "9°",
+            "Minimum predicted weather": "4°",
+            "General weather description": "Perioade de ploaie"
+        },
+        {
+            "Day of the month": "4",
+            "Maximum predicted weather": "10°",
+            "Minimum predicted weather": "4°",
+            "General weather description": "Perioade de ploaie"
+        },
+        {
+            "Day of the month": "5",
+            "Maximum predicted weather": "10°",
+            "Minimum predicted weather": "4°",
+            "General weather description": "Câteva averse"
+        },
+        {
+            "Day of the month": "6",
+            "Maximum predicted weather": "8°",
+            "Minimum predicted weather": "3°",
+            "General weather description": "Perioade de ploaie"
+        }
+    ]
+}
