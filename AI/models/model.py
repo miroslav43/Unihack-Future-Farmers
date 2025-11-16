@@ -41,6 +41,6 @@ def get_openrouter_model(
     return OpenRouter(
         id=id,
         api_key=api_key,
-        max_tokens=10000
+        max_tokens=50000
     )
     

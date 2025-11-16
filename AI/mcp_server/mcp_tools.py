@@ -49,7 +49,7 @@ mcp_employees_agent = FastMCP("Agent Employees MCP server", stateless_http=True,
 mcp_harvest_agent = FastMCP("Agent Harvest MCP server", stateless_http=True, port=8004)
     
 @mcp_weather_agent.tool()
-async def get_weather_informations_for_last_n_days(number_of_days: int, today_day: int, today_month:int, today_year: int) -> dict:
+async def get_weather_info_for_last_n_days(number_of_days: int, today_day: int, today_month:int, today_year: int) -> dict:
     """
         Tool description:
             Tool used to get information about the weather for the past n days, starting from
@@ -140,7 +140,7 @@ async def get_weather_info_for_the_next_n_days(days: int, today_day: int, today_
     return results
 
 @mcp_weather_agent.tool()
-async def get_weather_info_for_a_speciffic_day(day: int, month:int, year: int) -> dict:
+async def get_weather_info_for_a_day(day: int, month:int, year: int) -> dict:
     """
         Tool description:
             Tool used to get information about the weather for a speciffic day. This tool queries the weather database, 
@@ -209,7 +209,7 @@ async def get_oil_price_for_a_specific_day(day: int, month: int, year: int) -> d
     }
 
 @mcp_vehicles_agent.tool()
-async def get_total_oil_price_for_a_specific_specific_period_of_time(start_day: int, start_month: int, start_year: int, end_day: int, end_month: int, end_year: int) -> dict:
+async def get_total_oil_price_for_a_period_of_time(start_day: int, start_month: int, start_year: int, end_day: int, end_month: int, end_year: int) -> dict:
     """
         Tool description:
             Tool used to get information about the total oil price for a specific period of time. This tool queries a database where the oil prices are stored
@@ -276,7 +276,7 @@ async def get_total_oil_price_for_a_specific_specific_period_of_time(start_day: 
     }
 
 @mcp_employees_agent.tool()
-async def get_employees_which_need_to_be_paid_in_n_days_starting_from_a_specific_date(n_days: int,start_day: int,start_month: int,start_year: int) -> dict:
+async def get_employees_paid_in_n_days_from_date(n_days: int,start_day: int,start_month: int,start_year: int) -> dict:
     """
         Tool description:
             Tool used to get information about the employees which need to be paid in n days from a specific date. This tool queries the 
@@ -326,7 +326,7 @@ async def get_employees_which_need_to_be_paid_in_n_days_starting_from_a_specific
     }
 
 @mcp_employees_agent.tool()
-async def get_employee_working_hours_counter_for_a_specific_period(first_name: str,last_name: str,start_day: int,start_month: int,
+async def get_employee_working_hours_for_a_period(first_name: str,last_name: str,start_day: int,start_month: int,
                                                                    start_year: int,end_day: int,end_month: int,end_year: int) -> dict:
     """
         Tool description:
@@ -432,7 +432,7 @@ async def get_employee_with_a_specific_role(role: str) -> dict:
     }
 
 @mcp_employees_agent.tool()
-async def get_employees_birthday_in_next_n_days_starting_in_a_specific_day(n:int, start_day: int,start_month: int,
+async def get_employees_bday_in_next_n_days_from_day_x(n:int, start_day: int,start_month: int,
                                                                    start_year: int) -> dict:
     """
         Tool description:
