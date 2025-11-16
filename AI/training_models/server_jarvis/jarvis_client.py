@@ -11,8 +11,18 @@ import re
 # Get free API key from: https://console.picovoice.ai/
 ACCESS_KEY = os.getenv("JARVIS_ACCESS_KEY")
 
+# Check if access key is set
+if not ACCESS_KEY:
+    print("⚠️  WARNING: JARVIS_ACCESS_KEY environment variable not set!")
+    print("To set it, run:")
+    print("  export JARVIS_ACCESS_KEY='your_key_here'  # macOS/Linux")
+    print("  Or set it in your ~/.zshrc or ~/.bashrc")
+    print("\nGet your free key from: https://console.picovoice.ai/")
+    print("\nExiting...")
+    exit(1)
+
 # Server configuration
-SERVER_URL = "http://localhost:5000/command"  # Change if server is on different machine
+SERVER_URL = "http://localhost:6000/command"  # Change if server is on different machine
 
 # Initialize Whisper model once (reuse for efficiency)
 print("Loading Whisper model...")
@@ -63,6 +73,33 @@ def extract_plant_number(text):
 def parse_command(command_text):
     """Parse command and return code and additional data"""
     text_lower = command_text.lower()
+    
+    # Check for "map home" or "set home" (code 9)
+    if ("map" in text_lower or "set" in text_lower) and "home" in text_lower:
+        return {
+            "code": 9,
+            "action": "MAP HOME POSITION",
+            "text": command_text
+        }
+    
+    # Check for "full tour" or "auto tour" (code 8)
+    if ("full" in text_lower or "auto" in text_lower) and "tour" in text_lower:
+        return {
+            "code": 8,
+            "action": "START FULL AUTO TOUR",
+            "text": command_text
+        }
+    
+    # Check for "go to plant [number]" (code 7)
+    if "go" in text_lower and "plant" in text_lower:
+        plant_num = extract_plant_number(text_lower)
+        if plant_num:
+            return {
+                "code": 7,
+                "action": f"GO TO PLANT {plant_num}",
+                "plant_number": plant_num,
+                "text": command_text
+            }
     
     # Check for "sensors greenhouse" (code 6)
     if "sensor" in text_lower and "greenhouse" in text_lower:
@@ -131,13 +168,22 @@ def send_command(command_text):
         print("❌ No recognized command")
         return
     
+    # Determine timeout based on command type
+    # Code 7 (go to plant) needs more time: movement + 5s wait + return = ~30s
+    # Code 8 (full tour) needs even more time: ~90s
+    timeout = 5  # Default timeout
+    if parsed['code'] == 7:
+        timeout = 60  # Go to plant: 60 seconds
+    elif parsed['code'] == 8:
+        timeout = 120  # Full tour: 120 seconds
+    
     # Send to server
     try:
         print(f"📤 Sending command: {parsed['action']} (code: {parsed['code']})")
         response = requests.post(
             SERVER_URL,
             json=parsed,
-            timeout=5
+            timeout=timeout
         )
         
         if response.status_code == 200:
@@ -170,26 +216,40 @@ print("🎧 Listening for 'Jarvis'...\n")
 
 try:
     while True:
-        # Listen for wake word
-        pcm = audio_stream.read(porcupine.frame_length)
-        pcm = struct.unpack_from("h" * porcupine.frame_length, pcm)
-        
-        keyword_index = porcupine.process(pcm)
-        
-        if keyword_index >= 0:
-            print("✅ Wake word detected! Listening for command...\n")
+        try:
+            # Listen for wake word
+            pcm = audio_stream.read(porcupine.frame_length, exception_on_overflow=False)
+            pcm = struct.unpack_from("h" * porcupine.frame_length, pcm)
             
-            # Record command
-            audio_data = record_command(duration=5)
+            keyword_index = porcupine.process(pcm)
             
-            # Transcribe
-            command = transcribe_command(audio_data)
-            print(f"💬 You said: {command}\n")
-            
-            # Send command to server
-            send_command(command)
-            
-            print("\n🎧 Listening for 'Jarvis' again...\n")
+            if keyword_index >= 0:
+                print("✅ Wake word detected! Listening for command...\n")
+                
+                # Clear any remaining buffer
+                try:
+                    audio_stream.read(audio_stream.get_read_available(), exception_on_overflow=False)
+                except:
+                    pass
+                
+                # Record command
+                audio_data = record_command(duration=5)
+                
+                # Transcribe
+                command = transcribe_command(audio_data)
+                print(f"💬 You said: {command}\n")
+                
+                # Send command to server
+                send_command(command)
+                
+                print("\n🎧 Listening for 'Jarvis' again...\n")
+                
+        except OSError as e:
+            # Handle input overflow - just skip this frame
+            if "Input overflowed" in str(e):
+                continue
+            else:
+                raise
             
 except KeyboardInterrupt:
     print("\n🛑 Stopping...")
