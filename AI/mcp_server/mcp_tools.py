@@ -110,9 +110,31 @@ async def get_weather_info_for_the_next_n_days(days: int, today_day: int, today_
             type: (dict), meaning: a mapping for the weather (temperature and possible description) for the days that have been requested when calling this tool. 
     """
 
-    
+    today = datetime(today_year, today_month, today_day).strftime("%Y-%m-%d")
 
-    return {}
+    # Query for dates greater than today
+    query = {
+        "date": {"$gt": today}
+    }
+
+    # Sort ascending (nearest dates first), limit N days
+    cursor = collection_weather.find(query).sort("date", 1).limit(days)
+
+    documents = list(cursor)
+
+    results = {}
+    for doc in documents:
+        date_key = doc.get("date")
+        results[date_key] = {
+            "max_temp_celsius": doc.get("max_temp_celsius"),
+            "min_temp_celsius": doc.get("min_temp_celsius"),
+            "weather_description": doc.get("weather_description"),
+            "location": doc.get("location"),
+            "temperature_unit": doc.get("temperature_unit"),
+            "imported_at": serialize_datetime(doc.get("imported_at")),
+        }
+
+    return results
 
 @mcp_weather_agent.tool()
 async def get_weather_info_for_a_speciffic_day(day: int, month:int, year: int) -> dict:
@@ -128,9 +150,30 @@ async def get_weather_info_for_a_speciffic_day(day: int, month:int, year: int) -
             type: (dict), meaning: a mapping for the weather (temperature and possible description) for the date this tool was called with.
     """
 
-    
+    # Convert input date to string format "YYYY-MM-DD"
+    requested_date = datetime(year, month, day).strftime("%Y-%m-%d")
 
-    return {}
+    # Build query: find a document where date == requested_date
+    query = {"date": requested_date}
+
+    doc = collection_weather.find_one(query)
+
+    # If nothing found → return empty dict
+    if not doc:
+        return {}
+
+    # Build response
+    result = {
+        "date": doc.get("date"),
+        "max_temp_celsius": doc.get("max_temp_celsius"),
+        "min_temp_celsius": doc.get("min_temp_celsius"),
+        "weather_description": doc.get("weather_description"),
+        "location": doc.get("location"),
+        "temperature_unit": doc.get("temperature_unit"),
+        "imported_at": serialize_datetime(doc.get("imported_at")),
+    }
+
+    return result
 
 @mcp_agent2.tool()
 async def tool2(variable1: str) -> str:
