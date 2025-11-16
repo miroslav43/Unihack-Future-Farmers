@@ -16,10 +16,11 @@ collection_assesments = db['assesments']
 collection_documents = db['documents']
 collection_farmers = db['farmers']
 collection_harvest_logs = db['harvest_logs']
-collection_invetory = db['invetory']
+collection_inventory = db['inventory']
 collection_orders = db['orders']
 collection_tasks = db['tasks']
 collection_weather = db["weather_logs"]
+collection_farmers= db["farmers"]
 
 import datetime
 

@@ -40,6 +40,7 @@ dependencies = [
     { name = "mcp" },
     { name = "openai" },
     { name = "pymongo" },
+    { name = "uvicorn" },
 ]
 
 [package.metadata]
@@ -53,6 +54,7 @@ requires-dist = [
     { name = "mcp", specifier = ">=1.21.1" },
     { name = "openai", specifier = ">=2.8.0" },
     { name = "pymongo", extras = ["srv"], specifier = ">=4.15.4" },
+    { name = "uvicorn", specifier = ">=0.38.0" },
 ]
 
 [[package]]
